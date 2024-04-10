@@ -1,0 +1,26 @@
+.game{
+    margin-top: 20px;
+    box-shadow: 0px 0px 30px 30px #767620;
+    border: solid 1px black;
+    width: 920px;
+    height: 630px;
+    display: flex;
+}
+
+.bord{
+    box-shadow: 0px 0px 20px 20px #764320;
+    background-image: url('/chess-background-board.jpg');
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center;
+    border: solid 1px greenyellow;
+    height: 100%;
+    width: 80%;
+}
+
+.gameInfo{
+    background-color: rgb(255, 228, 196);
+    height: 100%;
+    width: 20%;
+    border: solid 1px red;
+}

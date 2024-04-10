@@ -1,5 +1,18 @@
-.App{
+.Loby {
     // background-image: url('../public/chess-background-board.jpg');
+    box-shadow: 0px 0px 20px 20px #764320;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size:cover;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 500px;
+    height: 400px;
+}
+
+.onNewGame{
     box-shadow: 0px 0px 20px 20px #764320;
     background-position: center;
     background-repeat: no-repeat;
@@ -21,6 +34,22 @@
     align-self: center;
     width: 80%;
     height: 50px;
+}
+
+#PasswordInput{
+    box-shadow: 0px 0px 10px 10px #764320;
+    background-image: url('/wooden-background.jpg');
+    font-size: large;
+    margin-top: 20PX;
+    display: flex;
+    align-self: center;
+    width: 80%;
+    height: 50px;
+}
+.inputs{
+    
+    display: flex;
+    flex-direction: column;
 
 }
 
@@ -32,7 +61,7 @@
     justify-content: space-around;
     button{
         box-shadow: 0px 0px 10px 10px #764320;
-        background-image: url('../public/wooden-background.jpg');
+        background-image: url('/wooden-background.jpg');
         font-size: large;
         border: none;
     }
@@ -41,7 +70,7 @@
 
 .waitingList{
     box-shadow: 0px 0px 10px 10px #764320;
-    background-image: url('../public/wooden-background.jpg');
+    background-image: url('/wooden-background.jpg');
     font-size: large;
     display: flex;
     align-self: center;

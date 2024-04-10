@@ -1,23 +1,30 @@
-
+import { useEffect, useState } from "react"
+import gameStore from "./stores"
 import './App.scss'
+import Game from "./Game"
+import Loby from './Loby'
 
 
 
-const App = ()=> {
-  return(
-    <div className="App">
-      <input id='NickNameInput' type="text"  placeholder='Username'></input>
-      <div className="buttons">
-        <button>Random Game</button>
-        <button>Game with friend</button>
-      </div>
-      <div className="waitingList">
-        <ol>
-          <li>Miro</li>
-          <li>valio</li>
-        </ol>
-      </div>
-    </div>
+const App = () => {
+
+  const inGame = gameStore((state: any) => state.inGame)
+
+
+
+  
+
+  return (
+
+    <>
+      {
+        !inGame
+          ? <Loby />
+          : <Game />
+      }
+
+    </>
+
   )
 }
 
