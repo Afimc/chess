@@ -6,23 +6,26 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server,{cors: {origin: "http://localhost:5173"}});
-const {onDisconnect, onRequest} = require('./tools')
-import { games } from "./games"
+const {onDisconnect, onRequest, onRequestWaitingList, OnGameEnter, sendNewWaitingList, onExit} = require('./tools')
+import { Socket } from "socket.io";
+import {GamesManager } from "./games"
 
-interface ISocket {
- 
-}
 
-app.get('/', (req:any, res:any) => {
+const gamesManager = new GamesManager()
+
+
+app.get('/', (req: any, res: any) => {
     res.sendFile(__dirname + '/index.html');
   });
   
-  io.on('connection', (socket:any) => {
-    console.log('a user connected');
-    io.emit("new-waitingList",games)
-
-    socket.on("disconnect",()=>onDisconnect());
-    socket.on("game-request",(nickNameInput:string,PasswordInput:string)=>onRequest(nickNameInput,PasswordInput,socket,io.emit.bind(io)))
+  io.on('connection', (socket: any) => {
+    console.log(` user ${socket.id} connected`);
+    sendNewWaitingList(socket,gamesManager)
+    socket.on('exit', (id:string) => onExit(id,socket,gamesManager, io.emit.bind(io)))
+    socket.on('game-enter', (player:string, gameName:string) => OnGameEnter(player, gameName,socket, gamesManager, io.emit.bind(io)) )
+    socket.on('request-waitingList',()=>onRequestWaitingList(socket, gamesManager))
+    socket.on("disconnect", () => onDisconnect());
+    socket.on("game-request", (nickName: string, password: string) => onRequest(nickName, password, socket, io.emit.bind(io), gamesManager));
   });
   
   
