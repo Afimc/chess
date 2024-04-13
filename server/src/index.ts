@@ -22,7 +22,7 @@ app.get('/', (req: any, res: any) => {
     console.log(` user ${socket.id} connected`);
     sendNewWaitingList(socket,gamesManager)
     socket.on('exit', (id:string) => onExit(id,socket,gamesManager, io.emit.bind(io)))
-    socket.on('game-enter', (player:string, gameName:string) => OnGameEnter(player, gameName,socket, gamesManager, io.emit.bind(io)) )
+    socket.on('game-enter', (gameId:string,password:string) => OnGameEnter( gameId, password,socket, gamesManager, io.emit.bind(io)) )
     socket.on('request-waitingList',()=>onRequestWaitingList(socket, gamesManager))
     socket.on("disconnect", () => onDisconnect());
     socket.on("game-request", (nickName: string, password: string) => onRequest(nickName, password, socket, io.emit.bind(io), gamesManager));

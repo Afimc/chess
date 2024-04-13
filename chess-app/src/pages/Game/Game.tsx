@@ -8,10 +8,12 @@ import { socket } from "../../core/sockets"
 
 const Game = () => {
 const startStopGame = gameStore((state) => state.startStopGame)
+const gameID = gameStore((state)=>state.gameID)
 
 function exitGame(){
   socket.emit('exit', socket.id)
   startStopGame(false)
+  
 }
 
 
@@ -25,6 +27,11 @@ function exitGame(){
       </div>
       
       <div className="bord">
+        <div className="player1">
+        </div>
+        <div className="player2">
+
+        </div>
 
       </div>
        

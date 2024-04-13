@@ -21,9 +21,10 @@ function onExit(id:string, socket:Socket, gamesManager:GamesManager, ioEmit:any)
     ioEmit("new-waitingList", freeGamesInfo);
 }
 
-function OnGameEnter(player:string,gameName:string, socket:Socket, gamesManager:GamesManager,ioEmit:any){
-    socket.emit('game-mached',true)
-    gamesManager.removeGame(gameName)
+function OnGameEnter(gameId:string, password:string, socket:Socket, gamesManager:GamesManager,ioEmit:any){
+    gamesManager.checkGame(gameId, password, socket)
+  
+    gamesManager.removeGame(gameId)
     const freeGamesInfo = gamesManager.freeGamesInfo
     ioEmit("new-waitingList", freeGamesInfo);
 }
@@ -38,10 +39,13 @@ function onRequest(
 ) {
   const playerOne = new Player(socket, nickName);
   const game = new Game(playerOne, password);
-
   gamesManager.addGame(game)
+
   const freeGamesInfo = gamesManager.freeGamesInfo
   ioEmit("new-waitingList", freeGamesInfo);
+  const gameID = game.uuid
+  socket.emit('game-info',gameID)
+
 }
 
 module.exports = { onDisconnect, onRequest, onRequestWaitingList, OnGameEnter, sendNewWaitingList, onExit};
