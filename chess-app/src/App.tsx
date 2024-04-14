@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import gameStore from "./core/stores"
+import gameStore, { IGameInfo } from "./core/stores"
 import './App.scss'
 import Game from "./pages/Game/Game"
 import Loby from './pages/Loby/Loby'
@@ -10,27 +10,30 @@ import { socket } from "./core/sockets"
 const App = () => {
 
   const inGame = gameStore((state: any) => state.inGame)
-  const gameID = gameStore((state)=> state.gameID)
-  const updateID = gameStore((state) => state.updateID)
   const startStopGame = gameStore((state) => state.startStopGame)
+  const setWaitingList = gameStore((state) => state.setWaitingList)
 
-
-  
   useEffect(() => {
-    socket.connect()
-    socket.on('game-info',(newGameID:string)=>{
-      console.log({a:newGameID})
-      updateID(newGameID)
-  })
+    socket.on('new-waitingList', (list: IGameInfo[]) => {
+      setWaitingList(list)
+    });
+
+    socket.on('game-mached', (isGamemached: boolean) => {
+      startStopGame(isGamemached)
+    });
+    
+    socket.connect();
+    socket.emit('request-waitingList');
 
     return () => {
-        socket.disconnect()
+      socket.disconnect()
+      socket.off('game-mached')
+      socket.off('new-waitingList')
     }
-}, [])
+  }, [])
 
 
   return (
-
     <>
       {
         !inGame

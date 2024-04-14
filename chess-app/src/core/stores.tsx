@@ -1,44 +1,34 @@
 import { create } from 'zustand'
 
 
+export interface IGameInfo {
+    nickName: string;
+    isLocked: boolean;
+    id: string;
+}
+
 interface IGameStore {
     inGame: boolean;
-    OnNewGame: boolean;
-    gameID: string;
-    startStopGame: (S: boolean) =>void;
-    SetOnNewGame: (S: boolean) =>void;
-    updateID : (S: string) =>void;
-   
+    onNewGame: boolean;
+    waitingList: IGameInfo[];
+    startStopGame: (s: boolean) => void;
+    setOnNewGame: (s: boolean) => void;
+    setWaitingList: (s: IGameInfo[]) => void;
+
 }
 
 const gameStore = create<IGameStore>()((set) => ({
     inGame: false,
-    OnNewGame: true,
-    gameID: '',
-    
+    onNewGame: false,
+    waitingList:[],
 
-    startStopGame: (S) => set(() => {
-        return {
-            inGame: S
-        }
-    }),
- 
-    SetOnNewGame: (S) =>set(()=>{
-        return{
-            OnNewGame: !S
-        }
-    }),
+    startStopGame: (inGame) => set(() => ({ inGame })),
 
-    updateID: (S) => set(()=>{
-        return{
-            gameID: S
-        }
-    }),
+    setOnNewGame: (onNewGame) => set(() => ({ onNewGame })),
+
+    setWaitingList : (s) =>set(() =>({ waitingList: s })),
 
 }))
-
-
-
 
 
 export default gameStore
