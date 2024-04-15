@@ -61,6 +61,7 @@ export class GamesManager {
       this.sendWaitingListToAll(gamesManager);
       pickedGame.playerTwo.socket.emit("game-mached", true);
       pickedGame.playerOne.socket.emit("game-mached", true);
+      pickedGame.startGame()
     } catch (error) {
       socket.emit("error", error.message);
     }
