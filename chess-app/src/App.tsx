@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect} from "react"
 import gameStore, { IGameInfo } from "./core/stores"
 import './App.scss'
 import Game from "./pages/Game/Game"
@@ -21,7 +21,9 @@ const App = () => {
     socket.on('game-mached', (isGamemached: boolean) => {
       startStopGame(isGamemached)
     });
-    
+
+
+
     socket.connect();
     socket.emit('request-waitingList');
 
