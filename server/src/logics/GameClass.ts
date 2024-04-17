@@ -1,64 +1,8 @@
+import { Piece } from "./Pieces";
 import { Player } from "./PlayerClass";
-import {
-  EPiece,
-  positionConvertToString,
-  positionConvertToVector,
-  availablePositions,
-  knightPositions,
-  rookPositions,
-  bishopPositions,
-} from "./inGame_functions";
 import { v4 as uuidv4 } from "uuid";
-
-export interface IGameInfo {
-  nickName: string;
-  isLocked: boolean;
-  id: string;
-}
-
-enum EColor {
-  BLACK,
-  WHITE,
-}
-
-class Piece {
-  constructor(private _type: EPiece, private _color: EColor) {}
-
-  public get type(): EPiece {
-    return this._type;
-  }
-
-  public get color(): EColor {
-    return this._color;
-  }
-}
-
-const w_Pawn = new Piece(EPiece.PAWN, EColor.WHITE);
-const w_Rook = new Piece(EPiece.ROOK, EColor.WHITE);
-const w_Knight = new Piece(EPiece.KNIGHT, EColor.WHITE);
-const w_Bishop = new Piece(EPiece.BISHOP, EColor.WHITE);
-const w_Queen = new Piece(EPiece.QUEEN, EColor.WHITE);
-const w_King = new Piece(EPiece.KING, EColor.WHITE);
-
-const b_Pawn = new Piece(EPiece.PAWN, EColor.BLACK);
-const b_Rook = new Piece(EPiece.ROOK, EColor.BLACK);
-const b_Knight = new Piece(EPiece.KNIGHT, EColor.BLACK);
-const b_Bishop = new Piece(EPiece.BISHOP, EColor.BLACK);
-const b_Queen = new Piece(EPiece.QUEEN, EColor.BLACK);
-const b_King = new Piece(EPiece.KING, EColor.BLACK);
-
-class ChessBoard {
-  grid = [
-    [w_Rook, w_Knight, w_Bishop, w_King, w_Queen, w_Bishop, w_Knight, w_Rook],
-    [w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn],
-    [b_Rook, b_Knight, b_Bishop, b_Queen, b_King, b_Bishop, b_Knight, b_Rook],
-  ];
-}
+import { EColor, IGameInfo, Iposition } from "./types";
+import { ChessBoard } from "./board";
 
 export class Game {
   private _password: string;
@@ -66,6 +10,8 @@ export class Game {
   playerTwo: Player | null = null;
   uuid: string;
   board: ChessBoard = new ChessBoard();
+  graveyard: Piece[] = [];
+  turns:number = 0
 
   constructor(playerOne: Player, password: string) {
     this._password = password;
@@ -92,33 +38,74 @@ export class Game {
   public get isEmpty(): boolean {
     return !this.playerTwo;
   }
-  move() {
-    const fromPositionX = 0;
-    const fromPositionY = 3;
-    const toPositionX = 2;
-    const toPositionY = 1;
-    const isAbleToMove = true;
+  updateGrid(){
+    const data = {
+      updatedBoard: this.board.gridWithPosiblePOsitions,
+      turns: this.turns
+    }
 
-    this.board.grid[toPositionY][toPositionX] =
-      this.board.grid[fromPositionY][fromPositionX];
-    this.board.grid[fromPositionY][fromPositionX] = null;
+    this.playerOne.socket.emit('updated-grid',data)
+    this.playerTwo.socket.emit('updated-grid',data)
+  }
+
+  moveToGraveyard(pieceToKill: Piece) {
+    this.graveyard.push(pieceToKill);
+  }
+
+  move(moveData:{fromPosition:Iposition,toPosition:Iposition}, player: Player) {
+    const { fromPosition, toPosition } = moveData;
+    const pieceToMove = this.board.grid[fromPosition.y][fromPosition.x];
+    if (!pieceToMove) { 
+      player.socket.emit("error", "chosse a piece")
+      return
+    };
+    const posiblePositions = pieceToMove.posiblePositions(fromPosition,this.board)
+    const aveilablePosiblePositions = posiblePositions.find((positon)=>positon.x===toPosition.x && positon.y===toPosition.y)
+    if(!aveilablePosiblePositions) return;
+    const pieceToKill = this.board.grid[toPosition.y][toPosition.x];
+    if (pieceToKill) this.moveToGraveyard(pieceToKill);
+    this.board.grid[toPosition.y][toPosition.x] = pieceToMove;
+    this.turns = this.turns + 1
+    this.updateGrid()
   }
 
   private startListenForEvents() {
-    this.playerOne.socket.on("move", (moveData) => {});
+    this.playerOne.socket.on("move", (moveData) => {
+      this.move(moveData, this.playerOne)
+    });
 
-    this.playerTwo.socket.on("move", (moveData) => {});
+    this.playerTwo.socket.on("move", (moveData) => {
+      this.move(moveData, this.playerTwo)
+    });
   }
 
   startGame() {
+    const isPlaierOneWhite = Math.random() > 0.5;
+
+    // const colorPlayerOne = isPlaierOneWhite? EColor.WHITE:EColor.BLACK
+    // const colorPlayerTwo = isPlaierOneWhite? EColor.BLACK:EColor.WHITE
+    // this.playerOne.color =colorPlayerOne;
+    // this.playerTwo.color = colorPlayerTwo;
+
+    if (isPlaierOneWhite) {
+      this.playerOne.color = EColor.WHITE;
+      this.playerTwo.color = EColor.BLACK;
+    } else {
+      this.playerOne.color = EColor.BLACK;
+      this.playerTwo.color = EColor.WHITE;
+    }
+
     const dataGame = {
       info: this.info,
       first: this.playerOne.socket.id,
       second: this.playerTwo.socket.id,
-      updatedBoard: this.board,
+      inittialBord: this.board.gridWithPosiblePOsitions,
+      black: isPlaierOneWhite ? this.playerTwo.socket.id : this.playerOne.socket.id,
+      white: isPlaierOneWhite ? this.playerOne.socket.id : this.playerTwo.socket.id,
     };
+    
     this.startListenForEvents();
-
     this.playerOne.socket.emit("data-game", dataGame);
+    this.playerTwo.socket.emit("data-game", dataGame);
   }
 }

@@ -1,22 +1,5 @@
-import { Piece } from "./test";
-
-export enum EPiece {
-  PAWN = "PAWN",
-  ROOK = "TOP",
-  KNIGHT = "KON",
-  BISHOP = "BISHOP",
-  QUEEN = "QUEEN",
-  KING = "KING",
-}
-
-export enum EColor {
-  BLACK,
-  WHITE,
-}
-export interface Iposition {
-  x: number,
-  y: number,
-}
+import { Piece } from "./Pieces";
+import { Iposition } from "./types";
 
 export function positionConvertToVector(position: string) {
   const [_x, _y] = position.split("");
@@ -35,17 +18,17 @@ export function positionConvertToString(vector: { x: number; y: number }) {
   return position;
 }
 
-
-
 export function posiblePositionsByDirection(fromPosition:Iposition, boardGrid:(null|Piece)[][], directions:Iposition[], range:number){
   const posiblePOsition:Iposition[]=[]
   const myColor = boardGrid[fromPosition.y][fromPosition.x].color
+
   directions.forEach((d)=>{
       for (let j = 0; j < range; j++) {
           const x = fromPosition.x + d.x*j;
           const y = fromPosition.y + d.y*j;
           const pos = {x,y};
           const conditions = pos.x >= 0 && pos.x < boardGrid[0].length && pos.y >=0 && pos.y < boardGrid.length;
+          if(fromPosition.x === x && fromPosition.y === y)continue
           let stopOnNext =false
           if (!conditions) return
           if (boardGrid[pos.y][pos.x] !== null) {

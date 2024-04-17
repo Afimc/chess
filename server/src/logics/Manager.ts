@@ -1,6 +1,7 @@
-import { Game, IGameInfo } from "./GameClass";
+import { Game } from "./GameClass";
 import { Player } from "./PlayerClass";
 import { Socket, Server } from "socket.io";
+import { IGameInfo } from "./types";
 
 export class GamesManager {
   private _games: Game[] = [];
