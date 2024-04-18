@@ -57,8 +57,8 @@ export class Piece {
           super(EPiece.KNIGHT, color)
       }
       posiblePositions(fromPosition: Iposition, board: ChessBoard) {
-          const {x,y} = fromPosition
-          const knightPositions:Iposition[] = [
+            const {x,y} = fromPosition
+            const knightPositions:Iposition[] = [
               { x: x - 2, y: y + 1 },
               { x: x - 2, y: y - 1 },
               { x: x + 2, y: y + 1 },
@@ -70,9 +70,23 @@ export class Piece {
               { x: x + 1, y: y - 2 },
             ];
             const filteredKnightPositions = knightPositions.filter(
-              (pos) => (pos.x >= 0 && pos.y >= 0 && pos.x < board.grid[0].length && pos.y < board.grid.length)
-            );
-            return filteredKnightPositions;
+              (pos) => (pos.x >= 0 && pos.y >= 0 && pos.x < board.grid[0].length && pos.y < board.grid.length )
+            ).filter((avPos)=> board.grid[avPos.y][avPos.x]? board.grid[avPos.y][avPos.x].color !== this.color : true)
+           
+        return filteredKnightPositions;
+
+        // const knightPositions:Iposition[] = []
+        // // if(pos.x >= 0 && pos.x < boardGrid[0].length && pos.y >=0 && pos.y < boardGrid.length)
+        // if (board.grid[y+1][x-2].color !== this.color) knightPositions.push({x:x-2, y:y+1})
+        // if (board.grid[y-1][x-2].color !== this.color) knightPositions.push({x:x-2, y:y-1})
+        // if (board.grid[y+1][x+2].color !== this.color) knightPositions.push({x:x+2, y:y-1})
+        // if (board.grid[y-1][x+2].color !== this.color) knightPositions.push({x:x-2, y:y-1})
+        // if (board.grid[y+2][x-1].color !== this.color) knightPositions.push({x:x-1, y:y+2})
+        // if (board.grid[y-2][x-1].color !== this.color) knightPositions.push({x:x-1, y:y-2})
+        // if (board.grid[y+2][x+1].color !== this.color) knightPositions.push({x:x+1, y:y+2})
+        // if (board.grid[y-2][x+1].color !== this.color) knightPositions.push({x:x+1, y:y-2})
+
+        // return knightPositions
       }
   }
   

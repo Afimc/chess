@@ -26,9 +26,11 @@ export class ChessBoard {
     [b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn],
     [b_Rook, b_Knight, b_Bishop, b_Queen, b_King, b_Bishop, b_Knight, b_Rook],
   ];
+
   get gridWithPosiblePOsitions(){
     return this.grid.map((row, y)=>{
       return row.map((piece, x)=>{
+        if(!piece)return piece
         return {
             piece:piece,
             posiblePositions: piece.posiblePositions({x, y},this)
@@ -37,3 +39,5 @@ export class ChessBoard {
     })
   }
 }
+ 
+
