@@ -6,24 +6,58 @@
     height: 630px;
     display: flex;
 }
+.gameInfo{
+    background-color: rgb(255, 228, 196);
+    height: 100%;
+    width: 20%;
+   
+}
+
+
 
 .bord{
     display: flex;
+    align-items: center;
     justify-content: center;
     box-shadow: 0px 0px 20px 20px #764320;
     background-image: url('/chess-background-board.jpg');
     background-repeat: no-repeat;
     background-size:cover;
     background-position: center;
-    border: solid 1px greenyellow;
     height: 100%;
     width: 80%;
-}
+        .iner-board{
+            width: 1000%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            // padding: 10px;
+        
+                .row{
+                  
+                    width: 100%;
+                    height: calc(93% / 8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
 
-.gameInfo{
-    background-color: rgb(255, 228, 196);
-    height: 100%;
-    width: 20%;
-    border: solid 1px red;
+
+                }
+                    .cell{
+                        
+                        background-image: url('/W_KING.png');
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        height: 100%;
+                        width: calc(80% / 8);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                        font-size: 12px
+                    }
+        }
 }
 

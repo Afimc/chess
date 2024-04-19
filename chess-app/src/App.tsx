@@ -22,6 +22,10 @@ const App = () => {
       startStopGame(isGamemached)
     });
 
+    socket.on ('data-game',(data:any)=>{
+      
+    })
+
 
 
     socket.connect();
@@ -29,6 +33,7 @@ const App = () => {
 
     return () => {
       socket.disconnect()
+      socket.off('data-game')
       socket.off('game-mached')
       socket.off('new-waitingList')
     }

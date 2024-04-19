@@ -75,18 +75,6 @@ export class Piece {
            
         return filteredKnightPositions;
 
-        // const knightPositions:Iposition[] = []
-        // // if(pos.x >= 0 && pos.x < boardGrid[0].length && pos.y >=0 && pos.y < boardGrid.length)
-        // if (board.grid[y+1][x-2].color !== this.color) knightPositions.push({x:x-2, y:y+1})
-        // if (board.grid[y-1][x-2].color !== this.color) knightPositions.push({x:x-2, y:y-1})
-        // if (board.grid[y+1][x+2].color !== this.color) knightPositions.push({x:x+2, y:y-1})
-        // if (board.grid[y-1][x+2].color !== this.color) knightPositions.push({x:x-2, y:y-1})
-        // if (board.grid[y+2][x-1].color !== this.color) knightPositions.push({x:x-1, y:y+2})
-        // if (board.grid[y-2][x-1].color !== this.color) knightPositions.push({x:x-1, y:y-2})
-        // if (board.grid[y+2][x+1].color !== this.color) knightPositions.push({x:x+1, y:y+2})
-        // if (board.grid[y-2][x+1].color !== this.color) knightPositions.push({x:x+1, y:y-2})
-
-        // return knightPositions
       }
   }
   
