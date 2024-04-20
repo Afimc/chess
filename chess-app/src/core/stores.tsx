@@ -1,5 +1,10 @@
 import { create } from 'zustand'
 
+export interface Iposition {
+    x: number,
+    y: number,
+  }
+
 
 export interface IGameInfo {
     nickName: string;
@@ -7,7 +12,7 @@ export interface IGameInfo {
     id: string;
 }
 
-interface IGameStore {
+export interface IGameStore {
     inGame: boolean;
     onNewGame: boolean;
     waitingList: IGameInfo[];
@@ -17,7 +22,7 @@ interface IGameStore {
 
 }
 
-const gameStore = create<IGameStore>()((set) => ({
+export const gameStore = create<IGameStore>()((set) => ({
     inGame: false,
     onNewGame: false,
     waitingList:[],
@@ -31,7 +36,7 @@ const gameStore = create<IGameStore>()((set) => ({
 }))
 
 
-export default gameStore
+
 
 
 

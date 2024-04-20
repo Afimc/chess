@@ -34,6 +34,7 @@
             justify-content: center;
             flex-direction: column;
             // padding: 10px;
+            border: solid 1px black;
         
                 .row{
                   
@@ -42,21 +43,30 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                
 
 
                 }
                     .cell{
                         
-                        background-image: url('/W_KING.png');
-                        background-position: center;
-                        background-repeat: no-repeat;
+                        // background-image: url('/W_KING.png');
+                        // background-position: center;
+                        // background-repeat: no-repeat;
                         height: 100%;
                         width: calc(80% / 8);
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        overflow: hidden;
-                        font-size: 12px
+                    
+                        font-size: 12px;
+                       
+                 
+                        
+                    }
+                    .posiblePositions{
+                      
+                        height: 100%;
+                        width: 100%
                     }
         }
 }
