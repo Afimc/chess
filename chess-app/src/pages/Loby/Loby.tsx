@@ -1,4 +1,4 @@
-import gameStore from "../../core/stores"
+import {gameStore} from "../../core/stores"
 import './Loby.scss'
 import NewGameGenerator from "./New-game-generator/NewGameGenerator"
 import ChooseGame from "./Chooose-game/ChooseGame"

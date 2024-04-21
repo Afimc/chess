@@ -1,5 +1,5 @@
 import { useState } from "react";
-import gameStore from "../../../core/stores";
+import {gameStore} from "../../../core/stores";
 import { socket } from "../../../core/sockets";
 
 const NewGameGenerator = () => {

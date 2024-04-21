@@ -11,12 +11,16 @@ const cols =[0,1,2,3,4,5,6,7];
 
 const Game = () => {
 const startStopGame = gameStore((state) => state.startStopGame)
-const [posiblePositions, setPosiblePositions] = useState<{x:number,y:number}[]>([])
+const [posiblePositions, setPosiblePositions] = useState<Iposition[]>([])
 const [ableToTrack, setAbleToTrack] = useState(false)
+const[mousePosition,setMousePosition] = useState<Iposition[]>([])
 const [fromPosition, setFromPosition] = useState<Iposition>()
 const [toPosition, setToPosition] = useState<Iposition>()
 
 useEffect(()=>{
+  socket.on ('data-game',(data:any)=>{
+      console.log(data)
+  })
 },[])
 
 function exitGame(){
@@ -38,37 +42,70 @@ function getPiece(y:number, x:number){
   return `${color}_${type}`
 }
 
-function trackMouse(event:any){
-  if(ableToTrack){
-    const positions= []
-    const position={
-      x:0,
-      y:0
-    }
-    const initialX = 372
-    const initialY =98
-    const cellSize =74
-    const x = Math.floor((event.clientX -initialX) / cellSize)
-    const y = Math.floor((event.clientY - initialY) / cellSize)
-    position.x=x 
-    position.y=y
-    positions.push(position)
-   
-      
-    
+function startMouseTracking(event:any){
+setAbleToTrack(true)
 
-
-  }
-
-  function sendMoveData(){
-    const moveData ={
-      fromPosition:{x:0,y:0},
-      toPosition: {x:0,y:0}
-    }
-    socket.emit('move',moveData)
-  }
-     
+const initialX = 372
+const initialY =98
+const cellSize =74
+const x = Math.floor((event.clientX -initialX) / cellSize)
+const y = Math.floor((event.clientY - initialY) / cellSize)
+const position={
+  x:x,
+  y:y
 }
+// console.log(position)
+setFromPosition(position)
+}
+
+function stopMouseTracking(event:any){
+  
+  const initialX = 372
+  const initialY =98
+  const cellSize =74
+  const x = Math.floor((event.clientX -initialX) / cellSize)
+  const y = Math.floor((event.clientY - initialY) / cellSize)
+  const position={
+    x:x,
+    y:y
+  }
+  // console.log(position)
+ setToPosition(position)
+setAbleToTrack(false)
+sendMoveData()
+}
+
+
+function sendMoveData(){
+  const moveData ={fromPosition, toPosition}
+console.log(moveData)
+  socket.emit('move',moveData)
+}
+
+// function trackMouse(event:any){
+//   if(ableToTrack){
+
+//     const position={
+//       x:0,
+//       y:0
+//     }
+//     const initialX = 372
+//     const initialY =98
+//     const cellSize =74
+//     const x = Math.floor((event.clientX -initialX) / cellSize)
+//     const y = Math.floor((event.clientY - initialY) / cellSize)
+//     position.x=x 
+//     position.y=y
+//     setMousePosition([...mousePosition ,position])
+//     setFromPosition(mousePosition[mousePosition.length+1-mousePosition.length-1])
+  
+//     setToPosition(mousePosition[mousePosition.length-1])
+    
+    
+//   }
+
+// }
+
 
   return (
     <div className="game">
@@ -78,14 +115,14 @@ function trackMouse(event:any){
       </div>
       <div className="bord">
         <div className="iner-board" 
-        onMouseDown={()=>{setAbleToTrack(true) }}
-        onMouseUp={()=>{setAbleToTrack(false)}}
-        onMouseMove={(event)=>trackMouse(event)}
+        onMouseDown={(event)=>{startMouseTracking(event) }}
+        onMouseUp={(event)=>{stopMouseTracking(event)}}
+        // onMouseMove={(event)=>trackMouse(event)}
         >
           {
             row.map((row,y)=>{
               return(
-                <div className="row">
+                <div className="row" >
                   {
                     cols.map((col,x)=>{
                       return(
@@ -96,7 +133,7 @@ function trackMouse(event:any){
                         onMouseDown={()=>{getPosiblePositions(row,col) }}
                         onMouseUp={()=>{setPosiblePositions([])}}
                         > 
-                          <img src={`${getPiece(y,x)}.png` || ''} alt="" />
+                          <img  src={`${getPiece(y,x)}.png` || ''} alt="" />
                       
                         <div className="posiblePositions" 
                         style={{border:posiblePositions.find((pos)=>pos.x === col && pos.y === row) ? "2px solid green" : ""}}>

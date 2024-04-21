@@ -1,5 +1,5 @@
 import { useState } from "react";
-import gameStore, { IGameInfo } from "../../../core/stores";
+import  { gameStore,IGameInfo } from "../../../core/stores";
 import { socket } from "../../../core/sockets";
 
 const ChooseGame = () => {

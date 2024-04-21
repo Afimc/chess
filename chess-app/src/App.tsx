@@ -1,5 +1,5 @@
 import { useEffect} from "react"
-import gameStore, { IGameInfo } from "./core/stores"
+import {gameStore,IGameInfo} from "./core/stores"
 import './App.scss'
 import Game from "./pages/Game/Game"
 import Loby from './pages/Loby/Loby'

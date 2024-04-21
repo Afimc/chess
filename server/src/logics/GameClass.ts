@@ -72,6 +72,7 @@ export class Game {
 
   private startListenForEvents() {
     this.playerOne.socket.on("move", (moveData) => {
+      console.log(moveData)
       this.move(moveData, this.playerOne)
     });
 
