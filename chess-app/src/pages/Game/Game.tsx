@@ -1,146 +1,111 @@
 import { useEffect, useState } from "react"
-import {gameStore,Iposition} from "../../core/stores"
+import { gameStore } from "../../core/PageStores"
 import './Game.scss'
 import { socket } from "../../core/sockets"
-import { mockedData } from "./mockedData";
-
-const row =[0,1,2,3,4,5,6,7];
-const cols =[0,1,2,3,4,5,6,7];
-
+import { IRow, Iposition, inGameStore } from "../../core/inGameStore";
 
 
 const Game = () => {
-const startStopGame = gameStore((state) => state.startStopGame)
-const [posiblePositions, setPosiblePositions] = useState<Iposition[]>([])
-const [ableToTrack, setAbleToTrack] = useState(false)
-const[mousePosition,setMousePosition] = useState<Iposition[]>([])
-const [fromPosition, setFromPosition] = useState<Iposition>()
-const [toPosition, setToPosition] = useState<Iposition>()
+  const startStopGame = gameStore((state) => state.startStopGame)
+  const [posiblePositions, setPosiblePositions] = useState<Iposition[]>([])
+  const [ableToTrack, setAbleToTrack] = useState(false)
+  const [currentMovePosition, setCurrentMovePosition] = useState<Iposition | null>()
+  const [movingImg, setMovingImg] = useState<string | null>()
+  const [fromPosition, setFromPosition] = useState<Iposition>()
+  const [toPosition, setToPosition] = useState<Iposition>()
+  const currentBoard = inGameStore((state)=>state.board)
+  const playerColor = inGameStore((state) => state.playerColor)
+  const onTurn = inGameStore((state) => state.onTurn)
+  const setOnTurn = inGameStore((state) => state.setOnTurn)
 
-useEffect(()=>{
-  socket.on ('data-game',(data:any)=>{
-      console.log(data)
-  })
-},[])
 
-function exitGame(){
-  socket.emit('exit', socket.id)
-  startStopGame(false) 
-}
-
-function getPosiblePositions(y:number,x:number){
-  const posiblePosition = mockedData[y][x]?.posiblePositions || [] ;
-  setPosiblePositions(posiblePosition)
-}
-
-function getPiece(y:number, x:number){
-  const piece = mockedData[y][x]
-  if(!piece) return null
-  const color = piece?.piece._color === 0 ? 'W':'B'
-  const type = piece?.piece._type
-
-  return `${color}_${type}`
-}
-
-function startMouseTracking(event:any){
-setAbleToTrack(true)
-
-const initialX = 372
-const initialY =98
-const cellSize =74
-const x = Math.floor((event.clientX -initialX) / cellSize)
-const y = Math.floor((event.clientY - initialY) / cellSize)
-const position={
-  x:x,
-  y:y
-}
-// console.log(position)
-setFromPosition(position)
-}
-
-function stopMouseTracking(event:any){
+  useEffect(() => {
   
-  const initialX = 372
-  const initialY =98
-  const cellSize =74
-  const x = Math.floor((event.clientX -initialX) / cellSize)
-  const y = Math.floor((event.clientY - initialY) / cellSize)
-  const position={
-    x:x,
-    y:y
+  }, [])
+
+  function exitGame() {
+    socket.emit('exit', socket.id)
+    startStopGame(false)
   }
-  // console.log(position)
- setToPosition(position)
-setAbleToTrack(false)
-sendMoveData()
-}
 
+  function getPiece(y: number, x: number) {
+    const piece = currentBoard[y][x]
+    if (!piece) return null
+    const color = piece?.piece._color === 0 ? 'W' : 'B'
+    const type = piece?.piece._type
+    return `${color}_${type}`
+  }
 
-function sendMoveData(){
-  const moveData ={fromPosition, toPosition}
-console.log(moveData)
-  socket.emit('move',moveData)
-}
+  function onMouseDown(y: number, x: number) {
+    const posiblePosition:Iposition[] = currentBoard[y][x]?.posiblePositions || [];
+    const _movingImg:string|null = getPiece(y, x)
 
-// function trackMouse(event:any){
-//   if(ableToTrack){
+    setPosiblePositions(posiblePosition)
+    setMovingImg(_movingImg)
+    setAbleToTrack(true)
+    setFromPosition({ x, y })
+  }
+console.log(onTurn)
+  function onMouseUp() {
+    if(ableToTrack){
+      setPosiblePositions([])
+      setAbleToTrack(false)
+      setCurrentMovePosition(null)
+      setMovingImg(null)
+      sendMoveRequest()
+    }
+  }
 
-//     const position={
-//       x:0,
-//       y:0
-//     }
-//     const initialX = 372
-//     const initialY =98
-//     const cellSize =74
-//     const x = Math.floor((event.clientX -initialX) / cellSize)
-//     const y = Math.floor((event.clientY - initialY) / cellSize)
-//     position.x=x 
-//     position.y=y
-//     setMousePosition([...mousePosition ,position])
-//     setFromPosition(mousePosition[mousePosition.length+1-mousePosition.length-1])
-  
-//     setToPosition(mousePosition[mousePosition.length-1])
-    
-    
-//   }
+  function onCellMouseMove(y: number, x: number) {
+    if (ableToTrack) {
+      if (currentMovePosition?.x !== x || currentMovePosition?.y !== y) {
+        setCurrentMovePosition({ x, y })
+        setToPosition({ x, y })
 
-// }
+      }
+    }
+  }
 
+  function sendMoveRequest(){
+    const DataMove={fromPosition,toPosition}
+    socket.emit('move',DataMove)
+  }
 
   return (
-    <div className="game">
-
+    <div className="game" onMouseUp={() =>onMouseUp() }>
       <div className="gameInfo">
-        <button onClick={exitGame}>Exit</button>  
+        <button onClick={exitGame}>Exit</button>
       </div>
       <div className="bord">
-        <div className="iner-board" 
-        onMouseDown={(event)=>{startMouseTracking(event) }}
-        onMouseUp={(event)=>{stopMouseTracking(event)}}
-        // onMouseMove={(event)=>trackMouse(event)}
+        <div className="iner-board"
         >
           {
-            row.map((row,y)=>{
-              return(
+            !currentBoard ? null :
+            currentBoard.map((row:IRow[], y:number) => {
+              return (
                 <div className="row" >
                   {
-                    cols.map((col,x)=>{
-                      return(
+                    row.map((_col:IRow, x:number) => {
+                      return (
                         <>
-                        <div 
-                        className="cell" 
-                        style={{cursor:getPiece(y,x)?"move":"unset"}}
-                        onMouseDown={()=>{getPosiblePositions(row,col) }}
-                        onMouseUp={()=>{setPosiblePositions([])}}
-                        > 
-                          <img  src={`${getPiece(y,x)}.png` || ''} alt="" />
-                      
-                        <div className="posiblePositions" 
-                        style={{border:posiblePositions.find((pos)=>pos.x === col && pos.y === row) ? "2px solid green" : ""}}>
-                        
-                        </div>
-                        </div>
-                     
+                          <div
+                            className="cell"
+                            style={{ cursor: getPiece(y, x) ? "move" : "unset" }}
+                            onMouseDown={() => {playerColor===currentBoard[y][x]?.piece._color && onTurn===socket.id? onMouseDown(y, x) : null}}
+                            onMouseMove={() => onCellMouseMove(y, x)}
+                          >
+                            <img src={`${getPiece(y, x)}.png` || ''} alt="" />
+                            <div className="posiblePositions"
+                              style={{ border: posiblePositions.find((pos) => pos.x === x && pos.y === y) ? "2px solid green" : "" }}>
+                            </div>
+                            {
+                              currentMovePosition?.x === x && currentMovePosition?.y === y && posiblePositions.find((pos) => pos.x === x && pos.y == y) && movingImg
+                              ? <div className="movingImgPositions">
+                                <img src={`${movingImg}.png` || ''} alt="" />
+                              </div>
+                              :null
+                            }
+                          </div>
                         </>
                       )
                     })
@@ -149,10 +114,8 @@ console.log(moveData)
               )
             })
           }
-
         </div>
       </div>
-       
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import  { gameStore,IGameInfo } from "../../../core/stores";
+import  { gameStore } from "../../../core/PageStores";
 import { socket } from "../../../core/sockets";
+import { IGameInfo, inGameStore } from "../../../core/inGameStore";
 
 const ChooseGame = () => {
     
@@ -9,7 +10,7 @@ const ChooseGame = () => {
     const [nickNameInput, setNiknameInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
 
-    const waitingList = gameStore((state) => state.waitingList);
+    const waitingList = inGameStore((state) => state.waitingList);
     const setOnNewGame = gameStore((state) => state.setOnNewGame);
 
     function gameRequest() {

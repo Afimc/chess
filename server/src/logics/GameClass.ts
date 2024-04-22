@@ -3,6 +3,7 @@ import { Player } from "./PlayerClass";
 import { v4 as uuidv4 } from "uuid";
 import { EColor, IGameInfo, Iposition } from "./types";
 import { ChessBoard } from "./board";
+import { Socket } from "socket.io";
 
 export class Game {
   private _password: string;
@@ -40,9 +41,11 @@ export class Game {
   }
   updateGrid(){
     const data = {
-      updatedBoard: this.board.grid,
+      updatedBoard: this.board.gridWithPosiblePOsitions,
       turns: this.turns,
-      graveyard : this.graveyard
+      graveyard : this.graveyard,
+      playerOne: this.playerOne.socket.id,
+      playerteo: this.playerTwo.socket.id
     }
     this.playerOne.socket.emit('updated-grid',data)
     this.playerTwo.socket.emit('updated-grid',data)
@@ -72,7 +75,6 @@ export class Game {
 
   private startListenForEvents() {
     this.playerOne.socket.on("move", (moveData) => {
-      console.log(moveData)
       this.move(moveData, this.playerOne)
     });
 
@@ -102,8 +104,8 @@ export class Game {
     
     const dataGame = {
       info: this.info,
-      first: this.playerOne.socket.id,
-      second: this.playerTwo.socket.id,
+      first: isPlaierOneWhite? this.playerOne.socket.id : this.playerTwo.socket.id,
+      second: isPlaierOneWhite? this.playerTwo.socket.id : this.playerOne.socket.id,
       inittialBord: this.board.gridWithPosiblePOsitions, 
       black: isPlaierOneWhite ? this.playerTwo.socket.id : this.playerOne.socket.id,
       white: isPlaierOneWhite ? this.playerOne.socket.id : this.playerTwo.socket.id,

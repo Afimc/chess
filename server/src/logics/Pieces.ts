@@ -122,7 +122,7 @@ export class Piece {
               {x:0, y:1}, {x:-1, y:+1},
               {x:0, y:-1}, {x:-1, y:-1}
           ]
-          const posiblePositions:Iposition[]=posiblePositionsByDirection(fromPosition,board.grid,directions,1)
+          const posiblePositions:Iposition[]=posiblePositionsByDirection(fromPosition,board.grid,directions,2)
           return posiblePositions;
       }
   }
