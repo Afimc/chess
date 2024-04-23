@@ -1,50 +1,32 @@
 import { create } from "zustand"
-
-export interface IRow{
-    piece: IPiece,
-    posiblePositions: Iposition[]
-}
-
-export interface IPiece{
-    _color: number,
-    _type: '',
-}
-
-export interface Iposition {
-    x: number,
-    y: number,
-  }
-
-export interface IGameInfo {
-    nickName: string;
-    isLocked: boolean;
-    id: string;
-}
-
-export interface IInGameStore {
-    board:any;
-    playerColor:number;
-    onTurn: any;
-    waitingList: IGameInfo[];
-
-    setBoard: (s:any) => void;
-    setColor: (s:number) => void;
-    setOnTurn: (s:any) => void;
-    setWaitingList: (s: IGameInfo[]) => void;
-   
-
-}
+import {IUpdatedDataStore} from './Interfaces'
 
 
-export const inGameStore = create<IInGameStore>()((set) => ({
-    board:[],
-    playerColor:0,
-    onTurn: false,
+export const updatedDataStore = create<IUpdatedDataStore>()((set)=>({
     waitingList:[],
-
-    setBoard: (s) => set (()=>({board:s})),
-    setColor: (s) => set (()=>({playerColor:s})),
-    setOnTurn: (s) => set (()=>({onTurn:s})),
+    playerColor:0,
+    board:[],
+    info:{
+        nickName: '',isLocked: true,id: '',
+    },
+    updatedBoard:{
+        piece:{
+            _color: 0,
+            _type: '',
+        },
+        posiblePositions:[],
+    },
+    turns:0,
+    graveyard:[],
+    white:'',
+    history:[],
+    
     setWaitingList : (s) => set(() =>({ waitingList: s })),
-
+    setColor: (s) => set (()=>({playerColor:s})),
+    setTurns: (s) => set (()=>({turns:s})),
+    setBoard: (s) => set (()=>({board:s})),
+    setHistory:(s) => set (()=>({history:s}))
+        
+    
+    
 }))

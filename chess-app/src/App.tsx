@@ -4,18 +4,17 @@ import './App.scss'
 import Game from "./pages/Game/Game"
 import Loby from './pages/Loby/Loby'
 import { socket } from "./core/sockets"
-import { IGameInfo, inGameStore } from "./core/inGameStore"
-
-
+import { updatedDataStore } from "./core/InGameStore"
+import { IGameInfo, IUpdatedData } from "./core/Interfaces"
 
 const App = () => {
-
-  const inGame = gameStore((state: any) => state.inGame)
+  const inGame = gameStore((state) => state.inGame)
   const startStopGame = gameStore((state) => state.startStopGame)
-  const setWaitingList = inGameStore((state) => state.setWaitingList)
-  const setBoard = inGameStore((state) => state.setBoard)
-  const setColor = inGameStore((state)=> state.setColor)
-  const setOnTurn = inGameStore((state)=> state.setOnTurn)
+  const setWaitingList = updatedDataStore((state) => state.setWaitingList)
+  const setBoard = updatedDataStore((state) => state.setBoard)
+  const setColor = updatedDataStore((state)=> state.setColor)
+  const setTurns = updatedDataStore((state)=>state.setTurns)
+  const setHistory = updatedDataStore((state)=>state.setHistory)
 
   useEffect(() => {
     socket.on('new-waitingList', (list: IGameInfo[]) => {
@@ -26,37 +25,32 @@ const App = () => {
       startStopGame(isGamemached)
     });
 
-    socket.on ('data-game',(data:any)=>{
-      console.log(data)
-      const color = socket.id===data.black ? 0 : 1
-      const onTurn = socket.id===data.first?socket.id :null
-      setOnTurn(onTurn)
+    // socket.on ('data-game',(data:any)=>{
+    //   const color = socket.id===data.white ? 1 : 0
+    //   setColor(color)
+    //   setBoard(data.inittialBord)
+    // })
+
+    socket.on ('updated-data',(data:IUpdatedData)=>{
+      // const _onTurn = data.turns % 2 === 0 ? 1 : 0
+      // setOnTurn(_onTurn)
+      const color = socket.id===data.white ? 1 : 0
+      setTurns(data.turns)
       setColor(color)
-      setBoard(data.inittialBord)
-    })
-
-    socket.on ('updated-grid',(data:any)=>{
-      console.log(data.turns)
-      const onTurn = data.turns%2 === 0 ? data.playerOne:data.playerTwo
-      setOnTurn(onTurn)
+      setHistory(data.history)
       setBoard(data.updatedBoard)
-      
     })
-
-
-
     socket.connect();
     socket.emit('request-waitingList');
 
     return () => {
       socket.disconnect()
-      socket.off('updated-grid')
-      socket.off('data-game')
+      socket.off('updated-data')
+      // socket.off('data-game')
       socket.off('game-mached')
       socket.off('new-waitingList')
     }
   }, [])
-
 
   return (
     <>
