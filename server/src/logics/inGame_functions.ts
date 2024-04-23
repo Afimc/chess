@@ -11,7 +11,7 @@ export function positionConvertToVector(position: string) {
 }
 
 export function positionConvertToString(vector: { x: number; y: number }) {
-  const y = vector.y;
+  const y = vector.y+1;
   const arr = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const x = arr[vector.x];
   const position = x + y;

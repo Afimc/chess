@@ -53,10 +53,10 @@ export class GamesManager {
     try {
       const pickedGame = this._games.find((game) => game.uuid === gameId);
       if (!pickedGame.isEmpty) {
-        throw new Error("ne e empti");
+        throw new Error("this game already been chosen");
       }
       if (pickedGame.isLocked && pickedGame.password !== password) {
-        throw new Error("pas");
+        throw new Error("Incorect Password");
       }
       pickedGame.playerTwo = new Player(socket, nickName2);
       this.sendWaitingListToAll(gamesManager);
