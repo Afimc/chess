@@ -4,7 +4,7 @@ import { Socket, Server } from "socket.io";
 import { IGameInfo } from "./types";
 
 export class GamesManager {
-  private _games: Game[] = [];
+  public _games: Game[] = [];
   constructor(private io: Server) {}
 
   public get freeGamesInfo(): IGameInfo[] {
@@ -37,8 +37,14 @@ export class GamesManager {
   }
 
   removeGame(gameId: string, gamesManager: GamesManager) {
+    console.log(this._games)
+    // const gameToDelete = this._games.find(game =>game.uuid === gameId)
+    // gameToDelete.playerOne.socket.emit('player-leave' ,true)
+    // gameToDelete.playerTwo.socket.emit('player-leave' ,true)
+    console.log({gameId})
     this._games = this._games.filter((game) => {
       game.uuid !== gameId;
+      console.log(this._games)
       this.sendWaitingListToAll(gamesManager);
     });
   }

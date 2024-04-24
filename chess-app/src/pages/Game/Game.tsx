@@ -8,10 +8,11 @@ import { IRow, Iposition } from "../../core/Interfaces";
 
 const Game = () => {
   const startStopGame = gameStore((state) => state.startStopGame)
-  const currentBoard = updatedDataStore((state) => state.board)
+  const currentBoard = updatedDataStore((state) => state.updatedBoard)
   const playerColor = updatedDataStore((state) => state.playerColor)
   const turns = updatedDataStore((state)=>state.turns)
   const history = updatedDataStore((state)=>state.history)
+  const info = updatedDataStore((state)=>state.info)
 
   const [posiblePositions, setPosiblePositions] = useState<Iposition[]>([])
   const [ableToTrack, setAbleToTrack] = useState(false)
@@ -25,20 +26,27 @@ const Game = () => {
   }, [])
 
   function exitGame() {
-    socket.emit('exit', socket.id)
+    socket.emit('exit', info.gameID)
     startStopGame(false)
   }
-
+  
   function IsonTurn(){
     const isOnTurn = turns % 2 === 0 ? 1 : 0
     return isOnTurn
   }
 
+  function getStringifyTurnHistory(turn:any){
+
+    const stringifyTurnHistory= `!!! on turn ${turn._turn} ${turn._pieceToMove} been moved from ${turn._fromPosition} 
+    to ${turn._toPosition} . ${turn._pieceToKill !==''? `On this move ${turn._pieceToKill}been send to the graveyard .`:'.'}`
+    return stringifyTurnHistory
+  }
+
   function getPiece(y: number, x: number) {
-    const piece = currentBoard[y][x]
-    if (!piece) return null
-    const color = piece?.piece._color === 1 ? 'W' : 'B'
-    const type = piece?.piece._type
+    const pieceWithPosiblePositions = currentBoard[y][x]
+    if (!pieceWithPosiblePositions) return null
+    const color = pieceWithPosiblePositions?.piece._color === 1 ? 'W' : 'B'
+    const type = pieceWithPosiblePositions?.piece._type
     return `${color}_${type}`
   }
 
@@ -74,16 +82,27 @@ const Game = () => {
   }
 
   function sendMoveRequest() {
-    const DataMove = { fromPosition, toPosition }
-    socket.emit('move', DataMove)
+    const dataMove = { fromPosition, toPosition }
+    socket.emit('move', dataMove)
   }
 
   return (
     <div className="game" onMouseUp={() => onMouseUp()}>
       <div className="gameInfo">
         <button onClick={exitGame}>Exit</button>
-        <p>{IsonTurn() === playerColor ? `you are on turn with ${playerColor === 1 ? 'white' : 'black'}` : 'wait'}</p>
-        <p> {history} </p>
+        <div className="onTurn">
+          <p>{IsonTurn() === playerColor ? `you are on turn with ${playerColor === 1 ? 'White' : 'Black'}` : 'wait'}</p>
+        </div>
+        <div className="history">
+          {
+            history.map((turn:any)=>{
+              const stringifyTurnHistory = getStringifyTurnHistory(turn)
+              return (
+                <div className="turn">{stringifyTurnHistory}</div>
+              )
+            })
+          } 
+        </div>
       </div>
       <div className="bord">
         <div className="iner-board"
@@ -98,7 +117,7 @@ const Game = () => {
                       row.map((_col: IRow, x: number) => {
                         return (
                           <>
-                            <div
+                            <div 
                               className="cell"
                               style={{ cursor: getPiece(y, x) ? "move" : "unset" }}
                               onMouseDown={() => { onMouseDown(y, x) }}

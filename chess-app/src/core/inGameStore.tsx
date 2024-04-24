@@ -4,29 +4,21 @@ import {IUpdatedDataStore} from './Interfaces'
 
 export const updatedDataStore = create<IUpdatedDataStore>()((set)=>({
     waitingList:[],
-    playerColor:0,
-    board:[],
+    playerColor:null,
     info:{
-        nickName: '',isLocked: true,id: '',
+       gameID:'', nickName:'', isLocked:false, id:'',
     },
-    updatedBoard:{
-        piece:{
-            _color: 0,
-            _type: '',
-        },
-        posiblePositions:[],
-    },
+    updatedBoard:[],
     turns:0,
     graveyard:[],
-    white:'',
+    whitePlayerId:'',
     history:[],
     
-    setWaitingList : (s) => set(() =>({ waitingList: s })),
-    setColor: (s) => set (()=>({playerColor:s})),
-    setTurns: (s) => set (()=>({turns:s})),
-    setBoard: (s) => set (()=>({board:s})),
-    setHistory:(s) => set (()=>({history:s}))
+    setInfo: (s)=>set(()=>({ info: s })),
+    setWaitingList: (s)=>set(()=>({ waitingList: s })),
+    setPlayerColor: (s)=>set(()=>({ playerColor:s })),
+    setTurns: (s)=>set(()=>({turns:s})),
+    setUpdatedBoard: (s)=>set(()=>({ updatedBoard:s })),
+    setHistory: (s)=>set(()=>({ history:s })),
         
-    
-    
 }))
