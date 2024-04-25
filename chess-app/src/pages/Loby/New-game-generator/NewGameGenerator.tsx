@@ -1,9 +1,9 @@
 import { useState } from "react";
-import {gameStore} from "../../../core/PageStores";
 import { socket } from "../../../core/sockets";
+import { gameStore } from "../../../core/PageStores";
+
 
 const NewGameGenerator = () => {
-
     const setOnNewGame = gameStore((state) => state.setOnNewGame);
     const [nickNameInput, setNickNameInput] = useState('');
     const [PasswordInput, setPasswordInput] = useState('');

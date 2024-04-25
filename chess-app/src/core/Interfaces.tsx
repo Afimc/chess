@@ -1,5 +1,5 @@
 
-export interface IRow{
+export interface IPieceWithPositon{
     piece: IPiece,
     posiblePositions: Iposition[]
 }
@@ -7,7 +7,6 @@ export interface Iposition {
     x: number,
     y: number,
   }
-
 
 export interface IPiece{
     _color: number,
@@ -18,24 +17,23 @@ export interface IGameInfo {
     gameID: string
     nickName: string;
     isLocked: boolean;
-    id: string;
   }
 
   export interface IHistoryTurn{
     _fromPosition: string,
     _toPosition: string,
     _pieceToMove: string,
-    _pieceToKill: string,
+    _pieceToKill: string|null,
     _turn: string,
   }
 
 export interface IUpdatedData{
-    info:IGameInfo;
-    updatedBoard:IRow[][];
-    turns:number;
-    graveyard:IPiece[];
-    whitePlayerId:string;
-    history:IHistoryTurn[]
+    info: IGameInfo;
+    updatedBoard: IPieceWithPositon[][];
+    turns: number;
+    graveyard: IPiece[];
+    whitePlayerId: string;
+    history: IHistoryTurn[]
 }
 
 export interface IGameStore {
@@ -48,19 +46,18 @@ export interface IGameStore {
 
 export interface IUpdatedDataStore{
     waitingList: IGameInfo[];
-    playerColor:number|null;
-    info:IGameInfo;
-    updatedBoard:IRow[][];
-    turns:number;
-    graveyard:IPiece[];
-    whitePlayerId:string;
-    history:IHistoryTurn[]
+    playerColor: number|null;
+    info: IGameInfo;
+    updatedBoard: IPieceWithPositon[][];
+    turns: number;
+    graveyard: IPiece[];
+    whitePlayerId: string;
+    history: IHistoryTurn[];
 
-    setInfo: (s:IGameInfo) => void;
     setWaitingList: (s:IGameInfo[]) => void;
     setPlayerColor: (s:number) => void;
+    setInfo: (s:IGameInfo) => void;
     setTurns: (s:number) => void;
-    setUpdatedBoard: (s:IRow[][]) => void;
+    setUpdatedBoard: (s:IPieceWithPositon[][]) => void;
     setHistory: (s:IHistoryTurn[]) => void;
-     
 }

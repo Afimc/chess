@@ -5,7 +5,7 @@ import { IGameInfo } from "./types";
 
 export class GamesManager {
   public _games: Game[] = [];
-  constructor(private io: Server) {}
+  constructor(private io: Server) {};
 
   public get freeGamesInfo(): IGameInfo[] {
     return this._games.filter((game) => game.isEmpty).map((game) => game.info);
@@ -15,12 +15,7 @@ export class GamesManager {
     return this._games;
   }
 
-  addGame(
-    nickName: string,
-    password: string,
-    gamesManager: GamesManager,
-    socket: Socket
-  ) {
+  addGame(nickName: string, password: string, gamesManager: GamesManager, socket: Socket) {
     const playerOne = new Player(socket, nickName);
     const game = new Game(playerOne, password);
     this._games.push(game);
@@ -31,33 +26,28 @@ export class GamesManager {
     const freeGamesInfo = gamesManager.freeGamesInfo;
     this.io.emit("new-waitingList", freeGamesInfo);
   }
+
   sendWaitingListToSinglePlayer(gamesManager: GamesManager, socket: Socket) {
     const freeGamesInfo = gamesManager.freeGamesInfo;
     socket.emit("new-waitingList", freeGamesInfo);
   }
 
-  removeGame(gameId: string, gamesManager: GamesManager) {
-    console.log(this._games)
-    // const gameToDelete = this._games.find(game =>game.uuid === gameId)
-    // gameToDelete.playerOne.socket.emit('player-leave' ,true)
-    // gameToDelete.playerTwo.socket.emit('player-leave' ,true)
-    console.log({gameId})
-    this._games = this._games.filter((game) => {
-      game.uuid !== gameId;
-      console.log(this._games)
-      this.sendWaitingListToAll(gamesManager);
-    });
+  removeGame(gameID: string, gamesManager: GamesManager) {
+    const gameToQuit = this._games.find(game => game.uuid === gameID);
+    this._games = this._games.filter((game) => game.uuid !== gameID);
+    gameToQuit?.stopGame();
+    this.sendWaitingListToAll(gamesManager);
   }
 
   checkGame(
-    gameId: string,
+    gameID: string,
     password: string,
     nickName2: string,
     gamesManager: GamesManager,
     socket: Socket
   ) {
     try {
-      const pickedGame = this._games.find((game) => game.uuid === gameId);
+      const pickedGame = this._games.find((game) => game.uuid === gameID);
       if (!pickedGame.isEmpty) {
         throw new Error("this game already been chosen");
       }
@@ -66,13 +56,11 @@ export class GamesManager {
       }
       pickedGame.playerTwo = new Player(socket, nickName2);
       this.sendWaitingListToAll(gamesManager);
-      pickedGame.playerTwo.socket.emit("game-mached", true);
-      pickedGame.playerOne.socket.emit("game-mached", true);
-      pickedGame.startGame() 
+      pickedGame.startGame();
      
     } catch (error) {
       socket.emit("error", error.message);
-      console.log(error.message)
+      console.log(error.message);
     }
   }
 }

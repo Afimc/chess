@@ -3,8 +3,7 @@ import { gameStore } from "../../core/PageStores"
 import './Game.scss'
 import { socket } from "../../core/sockets"
 import { updatedDataStore } from "../../core/InGameStore";
-import { IRow, Iposition } from "../../core/Interfaces";
-
+import { IHistoryTurn, IPieceWithPositon, Iposition } from "../../core/Interfaces";
 
 const Game = () => {
   const startStopGame = gameStore((state) => state.startStopGame)
@@ -22,23 +21,21 @@ const Game = () => {
   const [toPosition, setToPosition] = useState<Iposition>()
 
   useEffect(() => {
-
   }, [])
 
   function exitGame() {
     socket.emit('exit', info.gameID)
     startStopGame(false)
   }
-  
+
   function IsonTurn(){
     const isOnTurn = turns % 2 === 0 ? 1 : 0
     return isOnTurn
   }
 
-  function getStringifyTurnHistory(turn:any){
-
+  function getStringifyTurnHistory(turn:IHistoryTurn){
     const stringifyTurnHistory= `!!! on turn ${turn._turn} ${turn._pieceToMove} been moved from ${turn._fromPosition} 
-    to ${turn._toPosition} . ${turn._pieceToKill !==''? `On this move ${turn._pieceToKill}been send to the graveyard .`:'.'}`
+    to ${turn._toPosition} . ${turn._pieceToKill !==null? `On this move ${turn._pieceToKill}been send to the graveyard .`:'.'}`
     return stringifyTurnHistory
   }
 
@@ -59,8 +56,8 @@ const Game = () => {
       setAbleToTrack(true)
       setFromPosition({ x, y })
     }
-
-  }
+ }
+  
   function onMouseUp() {
     if (ableToTrack) {
       setPosiblePositions([])
@@ -89,13 +86,13 @@ const Game = () => {
   return (
     <div className="game" onMouseUp={() => onMouseUp()}>
       <div className="gameInfo">
-        <button onClick={exitGame}>Exit</button>
+        <button onClick={()=>exitGame()}>Exit</button>
         <div className="onTurn">
           <p>{IsonTurn() === playerColor ? `you are on turn with ${playerColor === 1 ? 'White' : 'Black'}` : 'wait'}</p>
         </div>
         <div className="history">
           {
-            history.map((turn:any)=>{
+            history.map((turn:IHistoryTurn)=>{
               const stringifyTurnHistory = getStringifyTurnHistory(turn)
               return (
                 <div className="turn">{stringifyTurnHistory}</div>
@@ -110,11 +107,11 @@ const Game = () => {
           {
             !currentBoard
               ? null
-              : currentBoard.map((row: IRow[], y: number) => {
+              : currentBoard.map((row: IPieceWithPositon[], y: number) => {
                 return (
                   <div className="row" >
                     {
-                      row.map((_col: IRow, x: number) => {
+                      row.map((_col: IPieceWithPositon, x: number) => {
                         return (
                           <>
                             <div 
@@ -148,6 +145,5 @@ const Game = () => {
     </div>
   )
 }
-
 
 export default Game

@@ -1,11 +1,10 @@
 import { useState } from "react";
-import  { gameStore } from "../../../core/PageStores";
 import { socket } from "../../../core/sockets";
+import  { gameStore } from "../../../core/PageStores";
 import { updatedDataStore } from "../../../core/InGameStore";
 import { IGameInfo } from "../../../core/Interfaces";
 
 const ChooseGame = () => {
-    
     const [game, setGame] = useState<IGameInfo | null>(null);
     const [openedJoin, setOpenedJoin] = useState(false)
     const [nickNameInput, setNiknameInput] = useState('');
@@ -15,8 +14,8 @@ const ChooseGame = () => {
     const setOnNewGame = gameStore((state) => state.setOnNewGame);
 
     function gameRequest() {
-        if(!game || !nickNameInput)return;
-        socket.emit('game-enter', game.id, passwordInput,nickNameInput);
+        if (!game || !nickNameInput)return;
+        socket.emit('game-enter', game.gameID, passwordInput,nickNameInput);
     }
 
     return (

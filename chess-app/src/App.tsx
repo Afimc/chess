@@ -1,16 +1,16 @@
 import { useEffect} from "react"
+import { socket } from "./core/sockets"
 import Game from "./pages/Game/Game"
 import Loby from './pages/Loby/Loby'
 import './App.scss'
-import {gameStore} from "./core/PageStores"
-import { socket } from "./core/sockets"
+import { gameStore } from "./core/PageStores"
 import { updatedDataStore } from "./core/InGameStore"
 import { IGameInfo, IUpdatedData } from "./core/Interfaces"
 
 const App = () => {
   const inGame = gameStore((state) => state.inGame)
-  const info = updatedDataStore((state)=>state.info)
   const playerColor = updatedDataStore((state)=>state.playerColor)
+  const info = updatedDataStore((state)=>state.info)
   const startStopGame = gameStore((state) => state.startStopGame)
   const setWaitingList = updatedDataStore((state) => state.setWaitingList)
   const setUpdatedBoard = updatedDataStore((state) => state.setUpdatedBoard)
@@ -29,16 +29,15 @@ const App = () => {
       startStopGame(isGamemached)
     });
 
-    socket.on('player-leave',(didPlayerLeave:Boolean)=>{
+    socket.on('player-leave',(didPlayerLeave: Boolean)=>{
       startStopGame(!didPlayerLeave)
     })
 
     socket.on ('updated-data',(data:IUpdatedData)=>{
       const color = socket.id===data.whitePlayerId ? 1 : 0
-      setInfo(data.info)
+      info.gameID ==='' ? setInfo(data.info) : null
+      playerColor===null? setPlayerColor(color) : null
       setTurns(data.turns)
-      console.log(info)
-      playerColor===null? setPlayerColor(color):null
       setHistory(data.history)
       setUpdatedBoard(data.updatedBoard)
     })
@@ -48,6 +47,7 @@ const App = () => {
 
     return () => {
       socket.disconnect()
+      socket.off('player-leave')
       socket.off('updated-data')
       socket.off('game-mached')
       socket.off('new-waitingList')

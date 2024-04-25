@@ -1,5 +1,5 @@
 import { Piece } from "./Pieces";
-import { Iposition } from "./types";
+import { IPosition } from "./types";
 
 export function positionConvertToVector(position: string) {
   const [_x, _y] = position.split("");
@@ -10,7 +10,7 @@ export function positionConvertToVector(position: string) {
   return res;
 }
 
-export function positionConvertToString(vector: { x: number; y: number }) {
+export function positionConvertToString(vector: IPosition) {
   const y = vector.y+1;
   const arr = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const x = arr[vector.x];
@@ -18,8 +18,8 @@ export function positionConvertToString(vector: { x: number; y: number }) {
   return position;
 }
 
-export function posiblePositionsByDirection(fromPosition:Iposition, boardGrid:(null|Piece)[][], directions:Iposition[], range:number){
-  const posiblePOsition:Iposition[]=[]
+export function posiblePositionsByDirection(fromPosition:IPosition, boardGrid:(null|Piece)[][], directions:IPosition[], range:number){
+  const posiblePOsition:IPosition[]=[]
   const myColor = boardGrid[fromPosition.y][fromPosition.x].color
 
   directions.forEach((d)=>{
