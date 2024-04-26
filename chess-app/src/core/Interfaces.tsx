@@ -58,6 +58,7 @@ export interface IUpdatedDataStore{
     setPlayerColor: (s:number) => void;
     setInfo: (s:IGameInfo) => void;
     setTurns: (s:number) => void;
+    setGraveyard: (s:IPiece[]) => void;
     setUpdatedBoard: (s:IPieceWithPositon[][]) => void;
     setHistory: (s:IHistoryTurn[]) => void;
 }

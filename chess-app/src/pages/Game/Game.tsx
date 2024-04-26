@@ -12,6 +12,7 @@ const Game = () => {
   const turns = updatedDataStore((state)=>state.turns)
   const history = updatedDataStore((state)=>state.history)
   const info = updatedDataStore((state)=>state.info)
+  const graveyard = updatedDataStore((state)=>state.graveyard)
 
   const [posiblePositions, setPosiblePositions] = useState<Iposition[]>([])
   const [ableToTrack, setAbleToTrack] = useState(false)
@@ -19,6 +20,8 @@ const Game = () => {
   const [movingImg, setMovingImg] = useState<string | null>()
   const [fromPosition, setFromPosition] = useState<Iposition>()
   const [toPosition, setToPosition] = useState<Iposition>()
+  const [whitePiecesFromGraveyard,setWhitePiecesFromGraveyard] = useState<string[]>([])
+  const [blackPiecesFromGraveyard,setBlackPiecesFromGraveyard] = useState<string[]>([])
 
   useEffect(() => {
   }, [])
@@ -45,6 +48,23 @@ const Game = () => {
     const color = pieceWithPosiblePositions?.piece._color === 1 ? 'W' : 'B'
     const type = pieceWithPosiblePositions?.piece._type
     return `${color}_${type}`
+  }
+  function getBlackGraveyard(){
+    const blackPiecesFromGraveyard = graveyard.filter(piece=>piece._color===0).map((piece)=>{
+      const color = piece?._color === 1 ? 'W' : 'B'
+      const type = piece?._type
+      return `${color}_${type}`
+  })
+  setBlackPiecesFromGraveyard(blackPiecesFromGraveyard)
+  }
+
+  function getWhiteGraveyard(){
+    const whitePiecesFromGraveyard=graveyard.filter(piece=>piece._color===1).map((piece)=>{
+        const color = piece?._color === 1 ? 'W' : 'B'
+        const type = piece?._type
+        return `${color}_${type}`
+    })
+    setWhitePiecesFromGraveyard(whitePiecesFromGraveyard)
   }
 
   function onMouseDown(y: number, x: number) {
@@ -83,8 +103,10 @@ const Game = () => {
     socket.emit('move', dataMove)
   }
 
+
   return (
-    <div className="game" onMouseUp={() => onMouseUp()}>
+
+      <div className="game" onMouseUp={() => onMouseUp()}>
       <div className="gameInfo">
         <button onClick={()=>exitGame()}>Exit</button>
         <div className="onTurn">
@@ -104,6 +126,15 @@ const Game = () => {
       <div className="bord">
         <div className="iner-board"
         >
+          <div className="whiteGraveyard" onMouseLeave={()=>setWhitePiecesFromGraveyard([])} onMouseOver={()=>getWhiteGraveyard()}>
+            {
+              whitePiecesFromGraveyard.map((piece)=>{
+                return(
+                  <img id="whiteGraveyardImages" src={`${piece}.png` || ''} alt="" />
+                )
+              })
+            }
+          </div>
           {
             !currentBoard
               ? null
@@ -140,9 +171,18 @@ const Game = () => {
                 )
               })
           }
+          <div className="blackGraveyard" onMouseLeave={()=>setBlackPiecesFromGraveyard([])} onMouseOver={()=>getBlackGraveyard()} >
+            {
+              blackPiecesFromGraveyard.map((piece)=>{
+                return(
+                  <img id="blackGraveyardImages" src={`${piece}.png` || ''} alt="" />
+                )
+              })
+            }
+          </div>  
         </div>
       </div>
-    </div>
+    </div>  
   )
 }
 

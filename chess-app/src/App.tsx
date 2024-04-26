@@ -18,6 +18,7 @@ const App = () => {
   const setTurns = updatedDataStore((state)=>state.setTurns)
   const setHistory = updatedDataStore((state)=>state.setHistory)
   const setInfo = updatedDataStore((state)=>state.setInfo)
+  const setGraveyard = updatedDataStore((state)=>state.setGraveyard)
   
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const App = () => {
       const color = socket.id===data.whitePlayerId ? 1 : 0
       info.gameID ==='' ? setInfo(data.info) : null
       playerColor===null? setPlayerColor(color) : null
+      setGraveyard(data.graveyard)
       setTurns(data.turns)
       setHistory(data.history)
       setUpdatedBoard(data.updatedBoard)
