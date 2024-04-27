@@ -1,3 +1,4 @@
+import { Piece } from "./Pieces";
 
 export interface IGameInfo {
   gameID: string;
@@ -37,4 +38,4 @@ export enum EPiece {
   KING = "KING",
 }
 
-
+export type TGrid = (Piece|null)[][]

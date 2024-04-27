@@ -1,5 +1,5 @@
 import { BISHOP, KING, KNIGHT, PAWN, Piece, QUEEN, ROOK } from "./Pieces";
-import { EColor } from "./types";
+import { EColor, TGrid } from "./types";
 
 const w_Pawn = new PAWN(EColor.WHITE);
 const w_Rook = new ROOK(EColor.WHITE);
@@ -16,7 +16,7 @@ const b_Queen = new QUEEN(EColor.BLACK);
 const b_King = new KING(EColor.BLACK);
 
 export class ChessBoard {
-  grid:(null|Piece)[][] = [
+  grid:TGrid= [
     [w_Rook, w_Knight, w_Bishop, w_King, w_Queen, w_Bishop, w_Knight, w_Rook],
     [w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn],
     [null, null, null, null, null, null, null, null],
@@ -30,14 +30,20 @@ export class ChessBoard {
   get gridWithPosiblePOsitions(){
     return this.grid.map((row, y)=>{
       return row.map((piece, x)=>{
-        if(!piece)return piece
+        if(!piece)return null
         return {
             piece:piece,
-            posiblePositions: piece.posiblePositions({x, y},this)
+            posiblePositions: piece.posiblePositions2({x, y},this)
         }
       })
     })
   }
+
+  cloneGrid():TGrid{
+    return this.grid.map((row)=>row.map((piece)=>piece))
+  }
+
+
 }
  
 

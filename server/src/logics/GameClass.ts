@@ -71,13 +71,14 @@ export class Game {
   }
 
   move(moveData: IMoveData, player: Player) {
+    console.log('\n\n*****\n\n')
     const { fromPosition, toPosition } = moveData;
     const pieceToMove = this.board.grid[fromPosition.y][fromPosition.x];
     if (!pieceToMove) {
       player.socket.emit("error", "chosse a piece");
       return;
     }
-    const posiblePositions = pieceToMove.posiblePositions(
+    const posiblePositions = pieceToMove.posiblePositions2(
       fromPosition,
       this.board
     );

@@ -42,3 +42,8 @@ export function posiblePositionsByDirection(fromPosition:IPosition, boardGrid:(n
   })
   return posiblePOsition
 }
+
+
+function isCheck(){
+  
+}
