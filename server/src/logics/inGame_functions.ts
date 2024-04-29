@@ -1,5 +1,42 @@
 import { Piece } from "./Pieces";
-import { IPosition } from "./types";
+import { Player } from "./PlayerClass";
+import { ChessBoard } from "./board";
+import { EPiece, IPosition, TGrid } from "./types";
+
+function checkForCheck(boardGridCopy: (Piece | null)[][], test: Piece) {
+  const enemyPieces = boardGridCopy.map((row, y) => {
+      return row.map((piece, x) => {
+        if (!piece) return null;
+        return piece.color === test.color
+          ? null
+          : {
+              piece: piece,
+              posiblePositions: piece.posiblePositions(
+                { x, y },
+                boardGridCopy
+              ),
+            };
+      });
+  })
+    .flat()
+    .filter((piece) => piece);
+
+  const checkPositions = enemyPieces.map((piece) => piece.posiblePositions).flat();
+
+  let curentKingPosition: IPosition;
+  for (let y = 0; y < boardGridCopy.length; y++) {
+    const row = boardGridCopy[y];
+    for (let x = 0; x < row.length; x++) {
+      const piece = row[x];
+      if (piece && piece.type === EPiece.KING && piece.color === test.color) {
+        curentKingPosition = { x, y };
+      }
+    }
+  }
+
+  if (!curentKingPosition) return false;
+  return checkPositions.some((cp: IPosition) =>cp.x === curentKingPosition.x && cp.y === curentKingPosition.y);
+}
 
 export function positionConvertToVector(position: string) {
   const [_x, _y] = position.split("");
@@ -43,7 +80,41 @@ export function posiblePositionsByDirection(fromPosition:IPosition, boardGrid:(n
   return posiblePOsition
 }
 
+export function checkForMatt(player:Player, board:ChessBoard){
+  const enemyPosiblePositions = board.grid.map((row, y) => {
+    return row.map((piece, x) => {
+      if (!piece) return null;
+      return piece.color === player.color? null : piece.posiblePositions2({ x, y },board) 
+    })
+}).flat(2).filter(pos=>pos!==null)
 
-function isCheck(){
-  
+const isMatt = enemyPosiblePositions.length === 0 ? true : false
+// console.log({a:isMatt,b:enemyPosiblePositions.length})
+return isMatt
+ 
+}
+
+export function isSafeToMove(fromPosition2: IPosition,toPosition: IPosition,board: ChessBoard,test: Piece) {
+  const boardCopy = board.cloneGrid();
+  const pieceToMove = boardCopy[fromPosition2.y][fromPosition2.x];
+  boardCopy[toPosition.y][toPosition.x] = pieceToMove;
+  boardCopy[fromPosition2.y][fromPosition2.x] = null;
+  const isCheck = checkForCheck(boardCopy, test);
+  return !isCheck;
+}
+
+export function blackCastling(grid:TGrid,fromPosition:IPosition, toPosition:IPosition,pieceToMove:Piece){
+  const pieceToSwap = grid[7][7]
+  grid[toPosition.y][toPosition.x] = pieceToMove;
+  grid[fromPosition.y][fromPosition.x] = null;
+  grid[7][7] = null
+  grid[7][5] = pieceToSwap
+}
+
+export function whiteCastling(grid:TGrid,fromPosition:IPosition, toPosition:IPosition,pieceToMove:Piece){
+  const pieceToSwap = grid[0][0]
+  grid[toPosition.y][toPosition.x] = pieceToMove;
+  grid[fromPosition.y][fromPosition.x] = null;
+  grid[0][0] = null
+  grid[0][2] = pieceToSwap
 }

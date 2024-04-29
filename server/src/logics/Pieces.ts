@@ -1,10 +1,7 @@
 import { ChessBoard } from "./board";
-import { posiblePositionsByDirection } from "./inGame_functions";
+import { isSafeToMove, posiblePositionsByDirection } from "./inGame_functions";
 import { EColor, EPiece, IPosition, TGrid } from "./types";
 
-//не може да местиш фигура ако поставяш царя ти в шах
-//при шах не може да си пак шах след хода или местиш царя или прикриваш
-//неможе царя да се мести там където ще бъдеш шах
 
 export class Piece {
   constructor(private _type: EPiece, private _color: EColor) {}
@@ -24,7 +21,6 @@ export class Piece {
   posiblePositions2(fromPosition: IPosition, board: ChessBoard): IPosition[] {
     const posiblePOsition = this.posiblePositions(fromPosition,board.grid).filter((pos) => {
       const isSafe = isSafeToMove(fromPosition, pos, board, this);
-      console.log({ isSafe, pos });
       return isSafe;
     });
     return posiblePOsition;
@@ -181,75 +177,10 @@ export class KING extends Piece {
       { x: 0, y: -1 },
       { x: -1, y: -1 },
     ];
-    const posiblePositions: IPosition[] = posiblePositionsByDirection(
-      fromPosition,
-      grid,
-      directions,
-      2
-    );
-
-    //   const enemyPieces = board.grid.map((row ,y)=>{
-    //     return row.map((piece,x)=>{
-    //         if (!piece )return null
-    //         if(piece.type===EPiece.KING)return null
-    //         return piece.color === this.color? null : {
-    //             piece:piece,
-    //             posiblePositions: piece.posiblePositions({x, y},board)
-    //         }
-    //     })
-    //   }).flat().filter(piece=>piece)
-    //   const checkPositions = enemyPieces.map(piece=>piece.posiblePositions).flat()
-
-    //   const finalPosition = posiblePositions.filter(pos=>{
-    //     const q = checkPositions.some(cp=>cp.x===pos.x && cp.y===pos.y)
-    //     return !q
-    //   })
-    //   console.log({finalPosition})
+    const posiblePositions: IPosition[] = posiblePositionsByDirection(fromPosition,grid,directions,2);
+    if (this.color===0 && fromPosition.x===4 && fromPosition.y===7 && grid[7][7]?.type===EPiece.ROOK) posiblePositions.push({x:fromPosition.x+2,y:fromPosition.y})
+    if (this.color===1 && fromPosition.x===3 && fromPosition.y===0 && grid[0][0]?.type===EPiece.ROOK) posiblePositions.push({x:fromPosition.x-2,y:fromPosition.y})
     return posiblePositions;
   }
 }
 
-function checkForCheck(boardGridCopy: (Piece | null)[][], test: Piece) {
-  const enemyPieces = boardGridCopy.map((row, y) => {
-      return row.map((piece, x) => {
-        if (!piece) return null;
-        if (piece.type === EPiece.KING) return null;
-        return piece.color === test.color
-          ? null
-          : {
-              piece: piece,
-              posiblePositions: piece.posiblePositions(
-                { x, y },
-                boardGridCopy
-              ),
-            };
-      });
-  })
-    .flat()
-    .filter((piece) => piece);
-
-  const checkPositions = enemyPieces.map((piece) => piece.posiblePositions).flat();
-
-  let curentKingPosition: IPosition;
-  for (let y = 0; y < boardGridCopy.length; y++) {
-    const row = boardGridCopy[y];
-    for (let x = 0; x < row.length; x++) {
-      const piece = row[x];
-      if (piece && piece.type === EPiece.KING && piece.color === test.color) {
-        curentKingPosition = { x, y };
-      }
-    }
-  }
-
-  if (!curentKingPosition) return false;
-  return checkPositions.some((cp: IPosition) =>cp.x === curentKingPosition.x && cp.y === curentKingPosition.y);
-}
-
-function isSafeToMove(fromPosition2: IPosition,toPosition: IPosition,board: ChessBoard,test: Piece) {
-  const boardCopy = board.cloneGrid();
-  const pieceToMove = boardCopy[fromPosition2.y][fromPosition2.x];
-  boardCopy[toPosition.y][toPosition.x] = pieceToMove;
-  boardCopy[fromPosition2.y][fromPosition2.x] = null;
-  const isCheck = checkForCheck(boardCopy, test);
-  return !isCheck;
-}

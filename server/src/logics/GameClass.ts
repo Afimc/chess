@@ -1,9 +1,9 @@
 import { Piece } from "./Pieces";
 import { Player } from "./PlayerClass";
 import { v4 as uuidv4 } from "uuid";
-import { EColor, IGameInfo, IHistoryTurn, IMoveData, IPosition,  } from "./types";
+import { EColor, EPiece, IGameInfo, IHistoryTurn, IMoveData, IPosition, TGrid,  } from "./types";
 import { ChessBoard } from "./board";
-import { positionConvertToString } from "./inGame_functions";
+import { blackCastling, checkForMatt, positionConvertToString, whiteCastling } from "./inGame_functions";
 
 export class Game {
   private _password: string;
@@ -69,31 +69,38 @@ export class Game {
     };
     this.history.unshift(addTurn);
   }
+  
 
   move(moveData: IMoveData, player: Player) {
     console.log('\n\n*****\n\n')
+   
     const { fromPosition, toPosition } = moveData;
     const pieceToMove = this.board.grid[fromPosition.y][fromPosition.x];
     if (!pieceToMove) {
       player.socket.emit("error", "chosse a piece");
       return;
     }
-    const posiblePositions = pieceToMove.posiblePositions2(
-      fromPosition,
-      this.board
-    );
+    const posiblePositions = pieceToMove.posiblePositions2(fromPosition,this.board);
     const aveilablePosiblePositions = posiblePositions.find(
       (positon) => positon.x === toPosition.x && positon.y === toPosition.y
     );
     if (!aveilablePosiblePositions) return;
     const pieceToKill = this.board.grid[toPosition.y][toPosition.x];
     if (pieceToKill) this.moveToGraveyard(pieceToKill);
+
+    if(pieceToMove.type === EPiece.KING){
+      if(pieceToMove.color===0 && toPosition.x===fromPosition.x+2) blackCastling(this.board.grid,fromPosition,toPosition,pieceToMove); 
+      if(pieceToMove.color===1 && toPosition.x===fromPosition.x-2) whiteCastling(this.board.grid,fromPosition,toPosition,pieceToMove);
+    }
+    
     this.board.grid[toPosition.y][toPosition.x] = pieceToMove;
     this.board.grid[fromPosition.y][fromPosition.x] = null;
     this.turns = this.turns + 1;
     this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition);
     this.updateData();
+    checkForMatt(player, this.board)
   }
+
 
   private startListenForEvents() {
     this.playerOne.socket.on("move", (moveData:IMoveData) => {
