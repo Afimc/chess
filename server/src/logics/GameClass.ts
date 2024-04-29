@@ -92,13 +92,30 @@ export class Game {
       if(pieceToMove.color===0 && toPosition.x===fromPosition.x+2) blackCastling(this.board.grid,fromPosition,toPosition,pieceToMove); 
       if(pieceToMove.color===1 && toPosition.x===fromPosition.x-2) whiteCastling(this.board.grid,fromPosition,toPosition,pieceToMove);
     }
+
+    if(pieceToMove.type === EPiece.PAWN && (toPosition.y===0||toPosition.y===7)){
+      
+      player.socket.emit("piece-request",true)
+      // player.socket.on('piece-to-reborn',(pieceToReborn)=>{
+      //   this.board.grid[toPosition.y][toPosition.x] = pieceToReborn
+      // })
+      
+      const pieceToReborn = this.graveyard[0]
+      this.board.grid[toPosition.y][toPosition.x] = pieceToReborn
+      this.board.grid[fromPosition.y][fromPosition.x] = null;
+      this.turns = this.turns + 1;
+      this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition);
+      this.updateData();
+      checkForMatt(player, this.board)
+    }else{
+      this.board.grid[toPosition.y][toPosition.x] = pieceToMove;
+      this.board.grid[fromPosition.y][fromPosition.x] = null;
+      this.turns = this.turns + 1;
+      this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition);
+      this.updateData();
+      checkForMatt(player, this.board)
+    }
     
-    this.board.grid[toPosition.y][toPosition.x] = pieceToMove;
-    this.board.grid[fromPosition.y][fromPosition.x] = null;
-    this.turns = this.turns + 1;
-    this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition);
-    this.updateData();
-    checkForMatt(player, this.board)
   }
 
 

@@ -44,6 +44,11 @@ const App = () => {
       setUpdatedBoard(data.updatedBoard)
     })
 
+    socket.on('piece-request',()=>{
+      console.log('test')
+    })
+
+
     socket.connect();
     socket.emit('request-waitingList');
 
