@@ -69,7 +69,7 @@ export function posiblePositionsByDirection(fromPosition:IPosition, boardGrid:(n
           let stopOnNext =false
           if (!conditions) return
           if (boardGrid[pos.y][pos.x] !== null) {
-            if(boardGrid[pos.y][pos.x].color !== myColor) {
+            if(boardGrid[pos.y][pos.x].color !== myColor) { // ++++++++++????????????????????+++++++++++++++
               stopOnNext = true
             } else {return}
           };
@@ -89,7 +89,6 @@ export function checkForMatt(player:Player, board:ChessBoard){
 }).flat(2).filter(pos=>pos!==null)
 
 const isMatt = enemyPosiblePositions.length === 0 ? true : false
-// console.log({a:isMatt,b:enemyPosiblePositions.length})
 return isMatt
  
 }
@@ -117,4 +116,14 @@ export function whiteCastling(grid:TGrid,fromPosition:IPosition, toPosition:IPos
   grid[fromPosition.y][fromPosition.x] = null;
   grid[0][0] = null
   grid[0][2] = pieceToSwap
+}
+
+export function getPieceToReborn(graveyard:Piece[],color:Number, type:string){
+
+  const pieceToReborn = graveyard.map((piece, x) => {
+      if (!piece) return null;
+      return piece.color === color && piece.type===type ? piece : null
+    }).filter(p=>p!==null)
+
+return pieceToReborn
 }

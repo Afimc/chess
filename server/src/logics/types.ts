@@ -22,6 +22,7 @@ export interface IHistoryTurn{
   _pieceToMove: string,
   _pieceToKill: string|null,
   _turn: string,
+  _pieceToResorect: string,
 }
 
 export enum EColor {
@@ -31,8 +32,8 @@ export enum EColor {
 
 export enum EPiece {
   PAWN = "PAWN",
-  ROOK = "TOP",
-  KNIGHT = "KON",
+  ROOK = "ROOK",
+  KNIGHT = "KNIGHT",
   BISHOP = "BISHOP",
   QUEEN = "QUEEN",
   KING = "KING",

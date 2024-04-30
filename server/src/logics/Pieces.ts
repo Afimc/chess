@@ -4,7 +4,7 @@ import { EColor, EPiece, IPosition, TGrid } from "./types";
 
 
 export class Piece {
-  constructor(private _type: EPiece, private _color: EColor) {}
+  constructor(private _type: EPiece, private _color: EColor, private _isMoved: boolean) {}
 
   public get type(): EPiece {
     return this._type;
@@ -13,6 +13,19 @@ export class Piece {
   public get color(): EColor {
     return this._color;
   }
+
+  
+  public get isMoved() : boolean {
+    return  this._isMoved;
+  }
+
+  
+  public set setIsMoved(v : boolean) {
+    this. _isMoved = v;
+  }
+  
+  
+
 
   posiblePositions(fromPosition: IPosition, grid: TGrid): IPosition[] {
     return [];
@@ -29,7 +42,7 @@ export class Piece {
 
 export class PAWN extends Piece {
   constructor(color: EColor) {
-    super(EPiece.PAWN, color);
+    super(EPiece.PAWN, color, false);
   }
 
   posiblePositions(fromPosition: IPosition, grid: TGrid) {
@@ -57,7 +70,7 @@ export class PAWN extends Piece {
 
 export class ROOK extends Piece {
   constructor(color: EColor) {
-    super(EPiece.ROOK, color);
+    super(EPiece.ROOK, color, false);
   }
 
   posiblePositions(fromPosition: IPosition, grid: TGrid) {
@@ -79,7 +92,7 @@ export class ROOK extends Piece {
 
 export class KNIGHT extends Piece {
   constructor(color: EColor) {
-    super(EPiece.KNIGHT, color);
+    super(EPiece.KNIGHT, color, false);
   }
 
   posiblePositions(fromPosition: IPosition, grid: TGrid) {
@@ -115,7 +128,7 @@ export class KNIGHT extends Piece {
 
 export class BISHOP extends Piece {
   constructor(color: EColor) {
-    super(EPiece.BISHOP, color);
+    super(EPiece.BISHOP, color, false);
   }
 
   posiblePositions(fromPosition: IPosition, grid: TGrid) {
@@ -137,7 +150,7 @@ export class BISHOP extends Piece {
 
 export class QUEEN extends Piece {
   constructor(color: EColor) {
-    super(EPiece.QUEEN, color);
+    super(EPiece.QUEEN, color, false);
   }
 
   posiblePositions(fromPosition: IPosition, grid: TGrid) {
@@ -163,7 +176,7 @@ export class QUEEN extends Piece {
 
 export class KING extends Piece {
   constructor(color: EColor) {
-    super(EPiece.KING, color);
+    super(EPiece.KING, color,false);
   }
 
   posiblePositions(fromPosition: IPosition, grid: TGrid) {
@@ -178,8 +191,8 @@ export class KING extends Piece {
       { x: -1, y: -1 },
     ];
     const posiblePositions: IPosition[] = posiblePositionsByDirection(fromPosition,grid,directions,2);
-    if (this.color===0 && fromPosition.x===4 && fromPosition.y===7 && grid[7][7]?.type===EPiece.ROOK) posiblePositions.push({x:fromPosition.x+2,y:fromPosition.y})
-    if (this.color===1 && fromPosition.x===3 && fromPosition.y===0 && grid[0][0]?.type===EPiece.ROOK) posiblePositions.push({x:fromPosition.x-2,y:fromPosition.y})
+    if (this.color===0 && this.isMoved===false && grid[7][7]?.isMoved===false && grid[7][5]===null) posiblePositions.push({x:fromPosition.x+2,y:fromPosition.y})
+    if (this.color===1 && this.isMoved===false && grid[0][0]?.isMoved===false && grid[0][2]===null) posiblePositions.push({x:fromPosition.x-2,y:fromPosition.y})
     return posiblePositions;
   }
 }

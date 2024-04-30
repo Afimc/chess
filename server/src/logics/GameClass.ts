@@ -3,7 +3,7 @@ import { Player } from "./PlayerClass";
 import { v4 as uuidv4 } from "uuid";
 import { EColor, EPiece, IGameInfo, IHistoryTurn, IMoveData, IPosition, TGrid,  } from "./types";
 import { ChessBoard } from "./board";
-import { blackCastling, checkForMatt, positionConvertToString, whiteCastling } from "./inGame_functions";
+import { blackCastling, checkForMatt, getPieceToReborn, positionConvertToString, whiteCastling } from "./inGame_functions";
 
 export class Game {
   private _password: string;
@@ -58,14 +58,27 @@ export class Game {
   moveToGraveyard(pieceToKill: Piece) {
     this.graveyard.push(pieceToKill);
   }
+  resurrection(color:number, type:string, fromPosition:IPosition, toPosition:IPosition,pieceToMove:Piece, pieceToKill:Piece,player:Player){
+    const pieceToReborn = getPieceToReborn(this.graveyard,color,type)
 
-  addToHistory(pieceToMove: Piece, pieceToKill: Piece, fromPosition: IPosition, toPosition: IPosition,) {
+    this.board.grid[toPosition.y][toPosition.x] = pieceToReborn[0]
+    this.board.grid[fromPosition.y][fromPosition.x] = null;
+    this.turns = this.turns + 1;
+    this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition, pieceToReborn[0]);
+    this.graveyard=this.graveyard.filter(p=> p  !== pieceToReborn[0])
+    this.moveToGraveyard(pieceToMove)
+    this.updateData();
+    checkForMatt(player, this.board)
+  }
+
+  addToHistory(pieceToMove: Piece, pieceToKill: Piece, fromPosition: IPosition, toPosition: IPosition,pieceToReborn:Piece) {
     const addTurn: IHistoryTurn = {
       _fromPosition: positionConvertToString(fromPosition),
       _toPosition: positionConvertToString(toPosition),
       _pieceToMove: `${pieceToMove.color === 1 ? "White" : "Black"} ${pieceToMove.type} `,
       _pieceToKill: pieceToKill ? `${pieceToKill.color === 1 ? "White" : "Black"} ${pieceToKill.type} ` : null,
       _turn: this.turns.toString(),
+      _pieceToResorect:pieceToReborn ? `${pieceToReborn.color === 1 ? "White" : "Black"} ${pieceToReborn.type} ` : null,
     };
     this.history.unshift(addTurn);
   }
@@ -82,36 +95,29 @@ export class Game {
     }
     const posiblePositions = pieceToMove.posiblePositions2(fromPosition,this.board);
     const aveilablePosiblePositions = posiblePositions.find(
-      (positon) => positon.x === toPosition.x && positon.y === toPosition.y
+      (positon) => positon?.x === toPosition?.x && positon?.y === toPosition?.y
     );
     if (!aveilablePosiblePositions) return;
     const pieceToKill = this.board.grid[toPosition.y][toPosition.x];
     if (pieceToKill) this.moveToGraveyard(pieceToKill);
+  
 
-    if(pieceToMove.type === EPiece.KING){
+    if(pieceToMove.type === EPiece.KING && pieceToMove.isMoved===false){
       if(pieceToMove.color===0 && toPosition.x===fromPosition.x+2) blackCastling(this.board.grid,fromPosition,toPosition,pieceToMove); 
       if(pieceToMove.color===1 && toPosition.x===fromPosition.x-2) whiteCastling(this.board.grid,fromPosition,toPosition,pieceToMove);
     }
 
     if(pieceToMove.type === EPiece.PAWN && (toPosition.y===0||toPosition.y===7)){
-      
-      player.socket.emit("piece-request",true)
-      // player.socket.on('piece-to-reborn',(pieceToReborn)=>{
-      //   this.board.grid[toPosition.y][toPosition.x] = pieceToReborn
-      // })
-      
-      const pieceToReborn = this.graveyard[0]
-      this.board.grid[toPosition.y][toPosition.x] = pieceToReborn
-      this.board.grid[fromPosition.y][fromPosition.x] = null;
-      this.turns = this.turns + 1;
-      this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition);
-      this.updateData();
-      checkForMatt(player, this.board)
+      player.socket.emit("piece-request")
+      player.socket.on('piece-to-reborn',(color,type)=>{
+        this.resurrection(color, type, fromPosition, toPosition,pieceToMove, pieceToKill,player)
+      })
     }else{
       this.board.grid[toPosition.y][toPosition.x] = pieceToMove;
       this.board.grid[fromPosition.y][fromPosition.x] = null;
       this.turns = this.turns + 1;
-      this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition);
+      pieceToMove.setIsMoved = true
+      this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition, null);
       this.updateData();
       checkForMatt(player, this.board)
     }

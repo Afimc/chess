@@ -3,16 +3,19 @@ import { gameStore } from "../../core/PageStores"
 import './Game.scss'
 import { socket } from "../../core/sockets"
 import { updatedDataStore } from "../../core/InGameStore";
-import { IHistoryTurn, IPieceWithPositon, Iposition } from "../../core/Interfaces";
+import { IHistoryTurn, IPiece, IPieceWithPositon, Iposition } from "../../core/Interfaces";
 
 const Game = () => {
   const startStopGame = gameStore((state) => state.startStopGame)
+  const onRebornRequest = gameStore((state)=>state.onRebornRequest)
   const currentBoard = updatedDataStore((state) => state.updatedBoard)
   const playerColor = updatedDataStore((state) => state.playerColor)
   const turns = updatedDataStore((state)=>state.turns)
   const history = updatedDataStore((state)=>state.history)
   const info = updatedDataStore((state)=>state.info)
   const graveyard = updatedDataStore((state)=>state.graveyard)
+  const setOnRebornRequest = gameStore((state)=>state.setOnRebornRequest)
+
 
   const [posiblePositions, setPosiblePositions] = useState<Iposition[]>([])
   const [ableToTrack, setAbleToTrack] = useState(false)
@@ -38,10 +41,11 @@ const Game = () => {
 
   function getStringifyTurnHistory(turn:IHistoryTurn){
     const stringifyTurnHistory= `!!! on turn ${turn._turn} ${turn._pieceToMove} been moved from ${turn._fromPosition} 
-    to ${turn._toPosition} . ${turn._pieceToKill !==null? `On this move ${turn._pieceToKill}been send to the graveyard .`:'.'}`
+    to ${turn._toPosition} . ${turn._pieceToKill !==null? `On this move ${turn._pieceToKill}been send to the graveyard .`:'.'}
+    ${turn._pieceToResorect !==null? `${turn._pieceToMove}been sacrificed to resurrect ${turn._pieceToResorect}`:''}`
     return stringifyTurnHistory
   }
-
+ 
   function getPiece(y: number, x: number) {
     const pieceWithPosiblePositions = currentBoard[y][x]
     if (!pieceWithPosiblePositions) return null
@@ -103,6 +107,11 @@ const Game = () => {
     socket.emit('move', dataMove)
   }
 
+  function sendPieceForReborn(color:number, type:string){
+    socket.emit('piece-to-reborn',color, type)
+    setOnRebornRequest(false)
+  }
+
 
   return (
 
@@ -124,16 +133,34 @@ const Game = () => {
         </div>
       </div>
       <div className="bord">
-        <div className="iner-board"
-        >
-          <div className="whiteGraveyard" onMouseLeave={()=>setWhitePiecesFromGraveyard([])} onMouseOver={()=>getWhiteGraveyard()}>
+        {
+          onRebornRequest===false
+          ?null
+          :<div className="reborn">
             {
+              graveyard.map((piece:IPiece)=>{
+                if(piece._color===playerColor)
+                return (
+                  <div className="pieceToReborn">
+                    <img onMouseDown={()=>sendPieceForReborn(piece._color, piece._type)} 
+                    src={`${piece?._color === 1 ? 'W' : 'B'}_${piece?._type}.png` || ''} alt="" >
+                    </img>
+                  </div>
+                )
+              })
+            }
+          </div>
+        }
+        <div className="iner-board">
+          <div className="whiteGraveyard" onMouseLeave={()=>setWhitePiecesFromGraveyard([])} onMouseOver={()=>getWhiteGraveyard()}>
+            { 
               whitePiecesFromGraveyard.map((piece)=>{
                 return(
                   <img id="whiteGraveyardImages" src={`${piece}.png` || ''} alt="" />
                 )
               })
             }
+            
           </div>
           {
             !currentBoard

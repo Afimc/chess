@@ -12,6 +12,7 @@ const App = () => {
   const playerColor = updatedDataStore((state)=>state.playerColor)
   const info = updatedDataStore((state)=>state.info)
   const startStopGame = gameStore((state) => state.startStopGame)
+  const setOnRebornRequest = gameStore((state)=>state.setOnRebornRequest)
   const setWaitingList = updatedDataStore((state) => state.setWaitingList)
   const setUpdatedBoard = updatedDataStore((state) => state.setUpdatedBoard)
   const setPlayerColor = updatedDataStore((state)=> state.setPlayerColor)
@@ -19,6 +20,7 @@ const App = () => {
   const setHistory = updatedDataStore((state)=>state.setHistory)
   const setInfo = updatedDataStore((state)=>state.setInfo)
   const setGraveyard = updatedDataStore((state)=>state.setGraveyard)
+  
   
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const App = () => {
     })
 
     socket.on('piece-request',()=>{
-      console.log('test')
+      setOnRebornRequest(true)
     })
 
 

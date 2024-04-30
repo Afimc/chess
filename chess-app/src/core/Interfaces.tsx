@@ -25,10 +25,11 @@ export interface IGameInfo {
     _pieceToMove: string,
     _pieceToKill: string|null,
     _turn: string,
+    _pieceToResorect:string|null
   }
 
 export interface IUpdatedData{
-    info: IGameInfo;
+    info: IGameInfo; 
     updatedBoard: IPieceWithPositon[][];
     turns: number;
     graveyard: IPiece[];
@@ -39,9 +40,11 @@ export interface IUpdatedData{
 export interface IGameStore {
     inGame: boolean;
     onNewGame: boolean;
+    onRebornRequest :boolean;
   
     startStopGame: (s: boolean) => void;
     setOnNewGame: (s: boolean) => void;
+    setOnRebornRequest: (s: boolean) => void;
 }
 
 export interface IUpdatedDataStore{
