@@ -14,19 +14,14 @@ export class Piece {
     return this._color;
   }
 
-  
   public get isMoved() : boolean {
     return  this._isMoved;
   }
-
   
   public set setIsMoved(v : boolean) {
     this. _isMoved = v;
   }
   
-  
-
-
   posiblePositions(fromPosition: IPosition, grid: TGrid): IPosition[] {
     return [];
   }
@@ -38,6 +33,7 @@ export class Piece {
     });
     return posiblePOsition;
   }
+
 }
 
 export class PAWN extends Piece {
@@ -191,9 +187,9 @@ export class KING extends Piece {
       { x: -1, y: -1 },
     ];
     const posiblePositions: IPosition[] = posiblePositionsByDirection(fromPosition,grid,directions,2);
-    if (this.color===0 && this.isMoved===false && grid[7][7]?.isMoved===false && grid[7][5]===null) posiblePositions.push({x:fromPosition.x+2,y:fromPosition.y})
-    if (this.color===1 && this.isMoved===false && grid[0][0]?.isMoved===false && grid[0][2]===null) posiblePositions.push({x:fromPosition.x-2,y:fromPosition.y})
-    return posiblePositions;
+    if (this.color===0 && this.isMoved===false && grid[7][7]?.isMoved===false && grid[7][5]===null && grid[7][6]===null) posiblePositions.push({x:fromPosition.x+2,y:fromPosition.y});
+    if (this.color===1 && this.isMoved===false && grid[0][0]?.isMoved===false && grid[0][2]===null && grid[0][1]===null) posiblePositions.push({x:fromPosition.x-2,y:fromPosition.y});
+      return posiblePositions;
   }
 }
 

@@ -115,7 +115,7 @@ const Game = () => {
 
   return (
 
-      <div className="game" onMouseUp={() => onMouseUp()}>
+    <div className="game" onMouseUp={() => onMouseUp()}>
       <div className="gameInfo">
         <button onClick={()=>exitGame()}>Exit</button>
         <div className="onTurn">
@@ -138,8 +138,7 @@ const Game = () => {
           ?null
           :<div className="reborn">
             {
-              graveyard.map((piece:IPiece)=>{
-                if(piece._color===playerColor)
+              graveyard.filter(piece=>piece._color===playerColor).map((piece:IPiece)=>{
                 return (
                   <div className="pieceToReborn">
                     <img onMouseDown={()=>sendPieceForReborn(piece._color, piece._type)} 

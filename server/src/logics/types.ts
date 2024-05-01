@@ -7,9 +7,9 @@ export interface IGameInfo {
 }
 
 export interface IPosition {
-    x: number,
-    y: number,
-  }
+  x: number,
+  y: number,
+}
 
 export interface IMoveData{
   fromPosition: IPosition,

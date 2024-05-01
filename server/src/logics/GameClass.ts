@@ -15,6 +15,7 @@ export class Game {
   turns: number = 0;
   whitePlayerId: string;
   history: IHistoryTurn[] = [];
+  
 
   constructor(playerOne: Player, password: string) {
     this._password = password;
@@ -69,6 +70,7 @@ export class Game {
     this.moveToGraveyard(pieceToMove)
     this.updateData();
     checkForMatt(player, this.board)
+   
   }
 
   addToHistory(pieceToMove: Piece, pieceToKill: Piece, fromPosition: IPosition, toPosition: IPosition,pieceToReborn:Piece) {
@@ -102,15 +104,16 @@ export class Game {
     if (pieceToKill) this.moveToGraveyard(pieceToKill);
   
 
-    if(pieceToMove.type === EPiece.KING && pieceToMove.isMoved===false){
+    if(pieceToMove.type === EPiece.KING){ 
       if(pieceToMove.color===0 && toPosition.x===fromPosition.x+2) blackCastling(this.board.grid,fromPosition,toPosition,pieceToMove); 
       if(pieceToMove.color===1 && toPosition.x===fromPosition.x-2) whiteCastling(this.board.grid,fromPosition,toPosition,pieceToMove);
     }
 
     if(pieceToMove.type === EPiece.PAWN && (toPosition.y===0||toPosition.y===7)){
       player.socket.emit("piece-request")
-      player.socket.on('piece-to-reborn',(color,type)=>{
+      player.socket.on('piece-to-reborn',(color,type)=>{ // ???????====>>>?????
         this.resurrection(color, type, fromPosition, toPosition,pieceToMove, pieceToKill,player)
+        return ()=>{player.socket.off('piece-to-reborn',this.resurrection)}
       })
     }else{
       this.board.grid[toPosition.y][toPosition.x] = pieceToMove;
@@ -123,13 +126,55 @@ export class Game {
     }
     
   }
+//?????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+  // private startListenForEvents() {
+  //   this.playerOne.socket.on("move", (moveData:IMoveData) => {
+  //     this.move(moveData, this.playerOne);
+  //       this.playerOne.socket.on('piece-to-reborn',(color,type)=>{ 
+  //       const { fromPosition, toPosition } = moveData;
+  //       const pieceToMove = this.board.grid[fromPosition.y][fromPosition.x];
+  //       if (!pieceToMove) {
+  //         this.playerOne.socket.emit("error", "chosse a piece");
+  //         return;
+  //       }
+  //     const posiblePositions = pieceToMove.posiblePositions2(fromPosition,this.board);
+  //     const aveilablePosiblePositions = posiblePositions.find(
+  //       (positon) => positon?.x === toPosition?.x && positon?.y === toPosition?.y
+  //     );
+  //     if (!aveilablePosiblePositions) return;
+  //     const pieceToKill = this.board.grid[toPosition.y][toPosition.x];
+  //     if (pieceToKill) this.moveToGraveyard(pieceToKill);
+  //         this.resurrection(color, type, fromPosition, toPosition,pieceToMove, pieceToKill,this.playerOne)
+  //       })
+  //   });
 
+  //   this.playerTwo.socket.on("move", (moveData:IMoveData) => {
+  //     this.move(moveData, this.playerTwo);
+  //     this.playerTwo.socket.on('piece-to-reborn',(color,type)=>{ 
+  //       const { fromPosition, toPosition } = moveData;
+  //       const pieceToMove = this.board.grid[fromPosition.y][fromPosition.x];
+  //       if (!pieceToMove) {
+  //         this.playerOne.socket.emit("error", "chosse a piece");
+  //         return;
+  //       }
+  //       const posiblePositions = pieceToMove.posiblePositions2(fromPosition,this.board);
+  //       const aveilablePosiblePositions = posiblePositions.find(
+  //         (positon) => positon?.x === toPosition?.x && positon?.y === toPosition?.y
+  //       );
+  //       if (!aveilablePosiblePositions) return;
+  //       const pieceToKill = this.board.grid[toPosition.y][toPosition.x];
+  //       if (pieceToKill) this.moveToGraveyard(pieceToKill);
+  //           this.resurrection(color, type, fromPosition, toPosition,pieceToMove, pieceToKill,this.playerTwo)
+  //     })
+  //   });
 
+  // }
+//??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
   private startListenForEvents() {
     this.playerOne.socket.on("move", (moveData:IMoveData) => {
       this.move(moveData, this.playerOne);
     });
-
+    
     this.playerTwo.socket.on("move", (moveData:IMoveData) => {
       this.move(moveData, this.playerTwo);
     });

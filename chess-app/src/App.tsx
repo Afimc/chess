@@ -60,6 +60,7 @@ const App = () => {
       socket.off('updated-data')
       socket.off('game-mached')
       socket.off('new-waitingList')
+      socket.off('piece-request')
     }
   }, [])
 
