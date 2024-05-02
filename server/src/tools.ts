@@ -1,18 +1,19 @@
 import { Server, Socket } from "socket.io";
-import { GamesManager } from "./logics/Manager";
+import { GamesManager } from "./logics/ManagerClass";
+import { ON } from "./logics/types";
 
 
 function handleSockets(io:Server, gamesManager:GamesManager){
-  io.on('connection', (socket: Socket) => onConnection(gamesManager, socket));
+  io.on(ON.CONNECTION, (socket: Socket) => onConnection(gamesManager, socket));
 }
 
 function onConnection( gamesManager:GamesManager, socket:Socket){
     console.log(` user ${socket.id} connected`);
-    socket.on("game-request", (nickName: string, password: string) => onRequest(nickName, password, gamesManager, socket));
-    socket.on('game-enter', (gameID:string,password:string, nickName2:string) => OnGameEnter( gameID, password,nickName2, socket, gamesManager));
-    socket.on('request-waitingList',()=>onRequestWaitingList(socket, gamesManager));
-    socket.on('exit', (gameID:string) => onExit(gameID,gamesManager));
-    socket.on("disconnect", () => onDisconnect(socket.id,gamesManager));
+    socket.on(ON.GAMEREQUEST, (nickName: string, password: string) => onRequest(nickName, password, gamesManager, socket));
+    socket.on(ON.GAMEENTER, (gameID:string,password:string, nickName2:string) => OnGameEnter( gameID, password,nickName2, socket, gamesManager));
+    socket.on(ON.REQUESTWAITINGLIST,()=>onRequestWaitingList(socket, gamesManager));
+    socket.on(ON.EXIT, (gameID:string) => onExit(gameID,gamesManager));
+    socket.on(ON.DISCONNECT, () => onDisconnect(socket.id,gamesManager));
     sendNewWaitingList(socket,gamesManager);
 }
 

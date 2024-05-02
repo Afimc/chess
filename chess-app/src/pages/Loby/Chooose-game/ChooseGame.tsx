@@ -2,7 +2,7 @@ import { useState } from "react";
 import { socket } from "../../../core/sockets";
 import  { gameStore } from "../../../core/PageStores";
 import { updatedDataStore } from "../../../core/InGameStore";
-import { IGameInfo } from "../../../core/Interfaces";
+import { EMIT, IGameInfo } from "../../../core/Interfaces";
 
 const ChooseGame = () => {
     const [game, setGame] = useState<IGameInfo | null>(null);
@@ -15,7 +15,7 @@ const ChooseGame = () => {
 
     function gameRequest() {
         if (!game || !nickNameInput)return;
-        socket.emit('game-enter', game.gameID, passwordInput,nickNameInput);
+        socket.emit(EMIT.GAMEENTER, game.gameID, passwordInput,nickNameInput);
     }
 
     return (

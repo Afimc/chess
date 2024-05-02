@@ -3,7 +3,7 @@ import { gameStore } from "../../core/PageStores"
 import './Game.scss'
 import { socket } from "../../core/sockets"
 import { updatedDataStore } from "../../core/InGameStore";
-import { IHistoryTurn, IPiece, IPieceWithPositon, Iposition } from "../../core/Interfaces";
+import { EMIT, IHistoryTurn, IPiece, IPieceWithPositon, Iposition } from "../../core/Interfaces";
 
 const Game = () => {
   const startStopGame = gameStore((state) => state.startStopGame)
@@ -30,7 +30,7 @@ const Game = () => {
   }, [])
 
   function exitGame() {
-    socket.emit('exit', info.gameID)
+    socket.emit(EMIT.EXIT, info.gameID)
     startStopGame(false)
   }
 
@@ -104,11 +104,12 @@ const Game = () => {
 
   function sendMoveRequest() {
     const dataMove = { fromPosition, toPosition }
-    socket.emit('move', dataMove)
+    socket.emit(EMIT.MOVE, dataMove)
   }
 
   function sendPieceForReborn(color:number, type:string){
-    socket.emit('piece-to-reborn',color, type)
+    socket.emit(EMIT.PIECETOREBORN, color, type,toPosition)
+    console.log(toPosition)
     setOnRebornRequest(false)
   }
 
@@ -142,7 +143,7 @@ const Game = () => {
                 return (
                   <div className="pieceToReborn">
                     <img onMouseDown={()=>sendPieceForReborn(piece._color, piece._type)} 
-                    src={`${piece?._color === 1 ? 'W' : 'B'}_${piece?._type}.png` || ''} alt="" >
+                    src={`piecesImages/${piece?._color === 1 ? 'W' : 'B'}_${piece?._type}.png` || ''} alt="" >
                     </img>
                   </div>
                 )
@@ -155,7 +156,7 @@ const Game = () => {
             { 
               whitePiecesFromGraveyard.map((piece)=>{
                 return(
-                  <img id="whiteGraveyardImages" src={`${piece}.png` || ''} alt="" />
+                  <img id="whiteGraveyardImages" src={`piecesImages/${piece}.png` || ''} alt="" />
                 )
               })
             }
@@ -177,14 +178,14 @@ const Game = () => {
                               onMouseDown={() => { onMouseDown(y, x) }}
                               onMouseMove={() => onCellMouseMove(y, x)}
                             >
-                              <img src={`${getPiece(y, x)}.png` || ''} alt="" />
+                              <img src={`piecesImages/${getPiece(y, x)}.png` || ''} alt="" />
                               <div className="posiblePositions"
                                 style={{ border: posiblePositions.find((pos) => pos.x === x && pos.y === y) ? "2px solid green" : "" }}>
                               </div>
                               {
                                 currentMovePosition?.x === x && currentMovePosition?.y === y && posiblePositions.find((pos) => pos.x === x && pos.y == y) && movingImg
                                   ? <div className="movingImgPositions">
-                                    <img src={`${movingImg}.png` || ''} alt="" />
+                                    <img src={`piecesImages/${movingImg}.png` || ''} alt="" />
                                   </div>
                                   : null
                               }
@@ -201,7 +202,7 @@ const Game = () => {
             {
               blackPiecesFromGraveyard.map((piece)=>{
                 return(
-                  <img id="blackGraveyardImages" src={`${piece}.png` || ''} alt="" />
+                  <img id="blackGraveyardImages" src={`piecesImages/${piece}.png` || ''} alt="" />
                 )
               })
             }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { socket } from "../../../core/sockets";
 import { gameStore } from "../../../core/PageStores";
+import { EMIT } from "../../../core/Interfaces";
 
 
 const NewGameGenerator = () => {
@@ -9,7 +10,7 @@ const NewGameGenerator = () => {
     const [PasswordInput, setPasswordInput] = useState('');
     
     function requestNewGame() {
-        socket.emit('game-request', nickNameInput, PasswordInput);
+        socket.emit(EMIT.GAMEREQUEST, nickNameInput, PasswordInput);
         setNickNameInput('');
         setPasswordInput('');
         setOnNewGame(false);

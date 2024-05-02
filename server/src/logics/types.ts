@@ -1,4 +1,4 @@
-import { Piece } from "./Pieces";
+import { Piece } from "./PiecesClass";
 
 export interface IGameInfo {
   gameID: string;
@@ -37,6 +37,27 @@ export enum EPiece {
   BISHOP = "BISHOP",
   QUEEN = "QUEEN",
   KING = "KING",
+}
+
+export enum ON {
+  CONNECTION = 'connection',
+  GAMEREQUEST = 'game-request',
+  GAMEENTER = 'game-enter',
+  REQUESTWAITINGLIST = 'request-waitingList',
+  EXIT = 'exit',
+  DISCONNECT = "disconnect",
+  MOVE = "move",
+  PIECETOREBORN = 'piece-to-reborn',
+}
+
+export enum EMIT {
+  ERROR = "error",
+  NEWWAITINGLIST = "new-waitingList",
+  GAMEMACHED = "game-mached",
+  PLAYERLEAVE = "player-leave",
+  PIECEREQUEST = "piece-request",
+  UPDATEDDATA = "updated-data",
+
 }
 
 export type TGrid = (Piece|null)[][]

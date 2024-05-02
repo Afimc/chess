@@ -4,7 +4,7 @@ import http from "http";
 import { Server } from "socket.io";
 
 import { handleSockets } from "./tools";
-import { GamesManager } from "./logics/Manager";
+import { GamesManager } from "./logics/ManagerClass";
 
 const app = express();
 app.use(cors());

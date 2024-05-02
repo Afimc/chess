@@ -1,5 +1,4 @@
 .App{
-    // background-image: url('../public/chess-background-board.jpg');
     box-shadow: 0px 0px 20px 20px #764320;
     background-position: center;
     background-repeat: no-repeat;
@@ -32,7 +31,7 @@
     justify-content: space-around;
     button{
         box-shadow: 0px 0px 10px 10px #764320;
-        background-image: url('../public/wooden-background.jpg');
+        background-image: url('/wooden-background.jpg');
         font-size: large;
         border: none;
     }
@@ -41,7 +40,7 @@
 
 .waitingList{
     box-shadow: 0px 0px 10px 10px #764320;
-    background-image: url('../public/wooden-background.jpg');
+    background-image: url('/wooden-background.jpg');
     font-size: large;
     display: flex;
     align-self: center;

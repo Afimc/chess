@@ -37,6 +37,26 @@ export interface IUpdatedData{
     history: IHistoryTurn[]
 }
 
+export enum ON {
+  ERROR = "error",
+  NEWWAITINGLIST = "new-waitingList",
+  GAMEMACHED = "game-mached",
+  PLAYERLEAVE = "player-leave",
+  PIECEREQUEST = "piece-request",
+  UPDATEDDATA = "updated-data",
+}
+
+export enum EMIT {
+  CONNECTION = 'connection',
+  REQUESTWAITINGLIST = 'request-waitingList',
+  GAMEREQUEST = 'game-request',
+  GAMEENTER = 'game-enter',
+  EXIT = 'exit',
+  DISCONNECT = "disconnect",
+  MOVE = "move",
+  PIECETOREBORN = 'piece-to-reborn',
+}
+
 export interface IGameStore {
     inGame: boolean;
     onNewGame: boolean;

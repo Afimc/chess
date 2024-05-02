@@ -1,7 +1,7 @@
 import { Game } from "./GameClass";
 import { Player } from "./PlayerClass";
 import { Socket, Server } from "socket.io";
-import { IGameInfo } from "./types";
+import { EMIT, IGameInfo } from "./types";
 
 export class GamesManager {
   public _games: Game[] = [];
@@ -24,12 +24,12 @@ export class GamesManager {
 
   sendWaitingListToAll(gamesManager: GamesManager) {
     const freeGamesInfo = gamesManager.freeGamesInfo;
-    this.io.emit("new-waitingList", freeGamesInfo);
+    this.io.emit(EMIT.NEWWAITINGLIST, freeGamesInfo);
   }
 
   sendWaitingListToSinglePlayer(gamesManager: GamesManager, socket: Socket) {
     const freeGamesInfo = gamesManager.freeGamesInfo;
-    socket.emit("new-waitingList", freeGamesInfo);
+    socket.emit(EMIT.NEWWAITINGLIST, freeGamesInfo);
   }
 
   removeGame(gameID: string, gamesManager: GamesManager) {
@@ -59,7 +59,7 @@ export class GamesManager {
       pickedGame.startGame();
      
     } catch (error) {
-      socket.emit("error", error.message);
+      socket.emit(EMIT.ERROR, error.message);
       console.log(error.message);
     }
   }

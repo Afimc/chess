@@ -1,4 +1,4 @@
-import { BISHOP, KING, KNIGHT, PAWN, Piece, QUEEN, ROOK } from "./Pieces";
+import { BISHOP, KING, KNIGHT, PAWN, Piece, QUEEN, ROOK } from "./PiecesClass";
 import { EColor, TGrid } from "./types";
 
 const w_Pawn = new PAWN(EColor.WHITE);
