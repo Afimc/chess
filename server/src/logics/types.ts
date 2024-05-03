@@ -2,7 +2,7 @@ import { Piece } from "./PiecesClass";
 
 export interface IGameInfo {
   gameID: string;
-  nickName: string;
+  gameName: string;
   isLocked: boolean;
 }
 

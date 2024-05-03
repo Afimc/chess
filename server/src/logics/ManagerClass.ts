@@ -15,9 +15,9 @@ export class GamesManager {
     return this._games;
   }
 
-  addGame(nickName: string, password: string, gamesManager: GamesManager, socket: Socket) {
+  addGame(nickName:string, password:string, gameName:string, gamesManager:GamesManager, socket:Socket) {
     const playerOne = new Player(socket, nickName);
-    const game = new Game(playerOne, password);
+    const game = new Game(playerOne, password, gameName);
     this._games.push(game);
     this.sendWaitingListToAll(gamesManager);
   }

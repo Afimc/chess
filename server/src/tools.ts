@@ -9,16 +9,16 @@ function handleSockets(io:Server, gamesManager:GamesManager){
 
 function onConnection( gamesManager:GamesManager, socket:Socket){
     console.log(` user ${socket.id} connected`);
-    socket.on(ON.GAMEREQUEST, (nickName: string, password: string) => onRequest(nickName, password, gamesManager, socket));
-    socket.on(ON.GAMEENTER, (gameID:string,password:string, nickName2:string) => OnGameEnter( gameID, password,nickName2, socket, gamesManager));
+    socket.on(ON.GAMEREQUEST, (nickName:string, password:string, gameName:string) => onRequest(nickName, password, gameName, gamesManager, socket));
+    socket.on(ON.GAMEENTER, (gameID:string, password:string, nickName2:string) => OnGameEnter( gameID, password,nickName2, socket, gamesManager));
     socket.on(ON.REQUESTWAITINGLIST,()=>onRequestWaitingList(socket, gamesManager));
     socket.on(ON.EXIT, (gameID:string) => onExit(gameID,gamesManager));
     socket.on(ON.DISCONNECT, () => onDisconnect(socket.id,gamesManager));
     sendNewWaitingList(socket,gamesManager);
 }
 
-function onRequest(nickName: string,password: string,gamesManager: GamesManager,socket: Socket,) {
-    gamesManager.addGame(nickName, password,gamesManager, socket)
+function onRequest(nickName: string,password:string, gameName:string ,gamesManager:GamesManager, socket:Socket,) {
+    gamesManager.addGame(nickName, password, gameName, gamesManager, socket)
 }
 
 function onDisconnect(socketid:string,gamesManager:GamesManager) {

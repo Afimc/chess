@@ -6,6 +6,7 @@ import { ChessBoard } from "./board";
 import { castling, checkForMatt, getPieceToReborn, positionConvertToString, } from "./inGame_functions";
 
 export class Game {
+  gameName:string;
   private _password: string;
   playerOne: Player;
   playerTwo: Player | null = null;
@@ -17,7 +18,8 @@ export class Game {
   history: IHistoryTurn[] = [];
   
 
-  constructor(playerOne: Player, password: string) {
+  constructor(playerOne: Player, password: string, gameName:string) {
+    this.gameName = gameName
     this._password = password;
     this.playerOne = playerOne;
     this.uuid = uuidv4();
@@ -34,7 +36,7 @@ export class Game {
   public get info(): IGameInfo {
     return {
       gameID: this.uuid,
-      nickName: this.playerOne.name,
+      gameName: this.gameName,
       isLocked: this.isLocked,
     };
   }
@@ -98,7 +100,9 @@ export class Game {
     const pieceToKill = this.board.grid[toPosition.y][toPosition.x];
     if (pieceToKill) this.moveToGraveyard(pieceToKill);
     if (pieceToMove.type === EPiece.KING) castling(this.board.grid,fromPosition,toPosition,pieceToMove);
-    if (pieceToMove.type === EPiece.PAWN && (toPosition.y===0||toPosition.y===7)) player.socket.emit(EMIT.PIECEREQUEST)
+    if (pieceToMove.type === EPiece.PAWN && (toPosition.y===0||toPosition.y===7)) {
+      player.socket.emit(EMIT.PIECEREQUEST)
+    }
 
     this.board.grid[toPosition.y][toPosition.x] = pieceToMove;
     this.board.grid[fromPosition.y][fromPosition.x] = null;
