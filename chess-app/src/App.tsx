@@ -3,6 +3,7 @@
 // да вкарам хедъра вътре в апа +++
 // да има инпут за име на играта и да го праща него а не имието на играча
 // отделни елементи за геим ретърна 
+// da prashta kolko igri se igraqt v momenta 
 
 
 import { useEffect} from "react"
@@ -54,6 +55,7 @@ const App = () => {
     })
 
     socket.on(ON.PIECEREQUEST,()=>{
+      console.log('request')
       setOnRebornRequest(true)
     })
 

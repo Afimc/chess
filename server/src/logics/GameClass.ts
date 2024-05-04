@@ -71,7 +71,7 @@ export class Game {
     this.moveToGraveyard(pieceToSacrrifice)
     this.updateData();
   }
-
+ 
   addToHistory(pieceToMove: Piece, pieceToKill: Piece, fromPosition: IPosition, toPosition: IPosition,pieceToReborn:Piece) {
     const addTurn: IHistoryTurn = {
       _fromPosition: positionConvertToString(fromPosition),
@@ -119,7 +119,7 @@ export class Game {
     const players = [this.playerOne, this.playerTwo]
     players.forEach(Player=>{
       Player.socket.on(ON.MOVE, (moveData:IMoveData) => {
-        this.move(moveData, this.playerOne);
+        this.move(moveData, Player);
       });
       Player.socket.on(ON.PIECETOREBORN,(color:number, type:string, pos:IPosition)=>{ 
         this.resurrection(color, type, pos)

@@ -16,10 +16,23 @@ export class GamesManager {
   }
 
   addGame(nickName:string, password:string, gameName:string, gamesManager:GamesManager, socket:Socket) {
-    const playerOne = new Player(socket, nickName);
-    const game = new Game(playerOne, password, gameName);
-    this._games.push(game);
-    this.sendWaitingListToAll(gamesManager);
+    try {
+      const playerOne = new Player(socket, nickName);
+      if(gameName===''){
+        throw new Error("enter Game Name");
+      }
+      const gameExist = this.allGames.some(game=>game.gameName === gameName)
+      if(gameExist===true){
+        throw new Error("GameName already exist");
+      }
+      const game = new Game(playerOne, password, gameName);
+      this._games.push(game);
+      this.sendWaitingListToAll(gamesManager);
+    } catch (error) {
+      socket.emit(EMIT.ERROR, error.message);
+      console.log(error.message);
+    }
+
   }
 
   sendWaitingListToAll(gamesManager: GamesManager) {
