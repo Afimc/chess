@@ -6,7 +6,7 @@ export const updatedDataStore = create<IUpdatedDataStore>()((set)=>({
     waitingList:[],
     playerColor:null,
     info:{
-       gameID:'', nickName:'', isLocked:false,
+       gameID:'', gameName:'', isLocked:false,
     },
     updatedBoard:[],
     turns:0,

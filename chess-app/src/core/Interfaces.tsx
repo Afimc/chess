@@ -15,7 +15,7 @@ export interface IPiece{
 
 export interface IGameInfo {
     gameID: string
-    nickName: string;
+    gameName: string;
     isLocked: boolean;
   }
 

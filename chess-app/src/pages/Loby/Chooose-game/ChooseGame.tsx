@@ -53,7 +53,7 @@ const ChooseGame = () => {
                                 {
                                     waitingList.map((x, i) => {
                                         return <li key={i}>
-                                            {x.nickName} {x.isLocked ? 'locked' : 'free'}
+                                            {x.gameName} {x.isLocked ? 'locked' : 'free'}
                                             <button id='EnterButton' onClick={() => {
                                                 setOpenedJoin(true)
                                                 setGame(x)

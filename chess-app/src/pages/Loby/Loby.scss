@@ -35,6 +35,17 @@
     height: 50px;
 }
 
+#GameNameInput{
+    box-shadow: 0px 0px 10px 10px #764320;
+    background-image: url('/wooden-background.jpg');
+    font-size: large;
+    margin-top: 20PX;
+    display: flex;
+    align-self: center;
+    width: 80%;
+    height: 50px;
+}
+
 #PasswordInput{
     box-shadow: 0px 0px 10px 10px #764320;
     background-image: url('/wooden-background.jpg');

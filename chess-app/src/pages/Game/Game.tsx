@@ -4,6 +4,7 @@ import './Game.scss'
 import { socket } from "../../core/sockets"
 import { updatedDataStore } from "../../core/InGameStore";
 import { EMIT, IHistoryTurn, IPiece, IPieceWithPositon, Iposition } from "../../core/Interfaces";
+import Reborn from "./GameElements/Reborn";
 
 const Game = () => {
   const startStopGame = gameStore((state) => state.startStopGame)
@@ -107,13 +108,6 @@ const Game = () => {
     socket.emit(EMIT.MOVE, dataMove)
   }
 
-  function sendPieceForReborn(color:number, type:string){
-    socket.emit(EMIT.PIECETOREBORN, color, type,toPosition)
-    console.log(toPosition)
-    setOnRebornRequest(false)
-  }
-
-
   return (
 
     <div className="game" onMouseUp={() => onMouseUp()}>
@@ -137,19 +131,7 @@ const Game = () => {
         {
           onRebornRequest===false
           ?null
-          :<div className="reborn">
-            {
-              graveyard.filter(piece=>piece._color===playerColor).map((piece:IPiece)=>{
-                return (
-                  <div className="pieceToReborn">
-                    <img onMouseDown={()=>sendPieceForReborn(piece._color, piece._type)} 
-                    src={`piecesImages/${piece?._color === 1 ? 'W' : 'B'}_${piece?._type}.png` || ''} alt="" >
-                    </img>
-                  </div>
-                )
-              })
-            }
-          </div>
+          :<Reborn  props = {toPosition}/>
         }
         <div className="iner-board">
           <div className="whiteGraveyard" onMouseLeave={()=>setWhitePiecesFromGraveyard([])} onMouseOver={()=>getWhiteGraveyard()}>
