@@ -12,7 +12,6 @@ const Reborn = ({props}:any) => {
 
   function sendPieceForReborn(color:number, type:string){
     socket.emit(EMIT.PIECETOREBORN, color, type,props)
-    console.log({color,type,props})
     setOnRebornRequest(false)
   }
 
