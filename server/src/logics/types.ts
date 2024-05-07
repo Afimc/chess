@@ -11,12 +11,12 @@ export interface IPosition {
   y: number,
 }
 
-export interface IMoveData{
+export interface IMoveData {
   fromPosition: IPosition,
   toPosition: IPosition,
 }  
 
-export interface IHistoryTurn{
+export interface IHistoryTurn {
   _fromPosition: string,
   _toPosition: string,
   _pieceToMove: string,
@@ -60,4 +60,4 @@ export enum EMIT {
 
 }
 
-export type TGrid = (Piece|null)[][]
+export type TGrid = (Piece | null)[][]

@@ -2,7 +2,6 @@ import { ChessBoard } from "./board";
 import { isSafeToMove, posiblePositionsByDirection } from "./inGame_functions";
 import { EColor, EPiece, IPosition, TGrid } from "./types";
 
-
 export class Piece { 
   private _isMoved:boolean = false
   constructor(private _type: EPiece, private _color: EColor) {}
@@ -34,7 +33,6 @@ export class Piece {
     });
     return posiblePOsition;
   }
-
 }
 
 export class PAWN extends Piece {
@@ -45,21 +43,16 @@ export class PAWN extends Piece {
   posiblePositions(fromPosition: IPosition, grid: TGrid) {
     const { x, y } = fromPosition;
     const posiblePositions: IPosition[] = [];
-    const j =
-      this.color === EColor.WHITE
-        ? { _y: y + 1, _y2: y + 2, pos: 1 }
-        : { _y: y - 1, _y2: y - 2, pos: 6 };
-    const isCurentPositionInBoard =
-      x >= 0 && y >= 0 && x < grid[0].length && y < grid.length;
+    const j = this.color === EColor.WHITE
+        ? { _y: y+1, _y2: y+2, pos: 1 }
+        : { _y: y-1, _y2: y-2, pos: 6 };
+    const isCurentPositionInBoard = x >= 0 && y >= 0 && x < grid[0].length && y < grid.length;
     const isTestPositionInBoard = j._y >= 0 && j._y < grid.length;
     if (isCurentPositionInBoard && isTestPositionInBoard) {
-      if (y === j.pos && grid[j._y][x] === null && grid[j._y2][x] === null)
-        posiblePositions.push({ x: x, y: j._y2 });
+      if (y === j.pos && grid[j._y][x] === null && grid[j._y2][x] === null) posiblePositions.push({ x: x, y: j._y2 });
       if (grid[j._y][x] === null) posiblePositions.push({ x: x, y: j._y });
-      if (grid[j._y][x + 1] && grid[j._y][x + 1].color !== this.color)
-        posiblePositions.push({ x: x + 1, y: j._y });
-      if (grid[j._y][x - 1] && grid[j._y][x - 1].color !== this.color)
-        posiblePositions.push({ x: x - 1, y: j._y });
+      if (grid[j._y][x+1] && grid[j._y][x+1].color !== this.color) posiblePositions.push({ x: x+1, y: j._y });
+      if (grid[j._y][x-1] && grid[j._y][x-1].color !== this.color) posiblePositions.push({ x: x-1, y: j._y });
     }
     return posiblePositions;
   }
@@ -77,12 +70,7 @@ export class ROOK extends Piece {
       { x: 0, y: 1 },
       { x: 0, y: -1 },
     ];
-    const posiblePOsition: IPosition[] = posiblePositionsByDirection(
-      fromPosition,
-      grid,
-      directions,
-      8
-    );
+    const posiblePOsition: IPosition[] = posiblePositionsByDirection(fromPosition, grid, directions, 8);
     return posiblePOsition;
   }
 }
@@ -106,19 +94,8 @@ export class KNIGHT extends Piece {
       { x: x + 1, y: y - 2 },
     ];
     const filteredKnightPositions = knightPositions
-      .filter(
-        //?????????????????????????????????????????????????????????
-        (pos) =>
-          pos.x >= 0 &&
-          pos.y >= 0 &&
-          pos.x < grid[0].length &&
-          pos.y < grid.length //?????????????
-      )
-      .filter((avPos) =>
-        grid[avPos.y][avPos.x]
-          ? grid[avPos.y][avPos.x].color !== this.color
-          : true
-      ); //?????
+      .filter((pos) => pos.x >= 0 && pos.y >= 0 && pos.x < grid[0].length && pos.y < grid.length)
+      .filter((avPos) => grid[avPos.y][avPos.x] ? grid[avPos.y][avPos.x].color !== this.color : true); 
     return filteredKnightPositions;
   }
 }
@@ -135,12 +112,7 @@ export class BISHOP extends Piece {
       { x: -1, y: +1 },
       { x: -1, y: -1 },
     ];
-    const posiblePositions: IPosition[] = posiblePositionsByDirection(
-      fromPosition,
-      grid,
-      directions,
-      8
-    );
+    const posiblePositions: IPosition[] = posiblePositionsByDirection(fromPosition, grid, directions, 8);
     return posiblePositions;
   }
 }
@@ -161,12 +133,7 @@ export class QUEEN extends Piece {
       { x: 0, y: -1 },
       { x: -1, y: -1 },
     ];
-    const posiblePositions: IPosition[] = posiblePositionsByDirection(
-      fromPosition,
-      grid,
-      directions,
-      8
-    );
+    const posiblePositions: IPosition[] = posiblePositionsByDirection(fromPosition, grid, directions, 8);
     return posiblePositions;
   }
 }
@@ -187,9 +154,13 @@ export class KING extends Piece {
       { x: 0, y: -1 },
       { x: -1, y: -1 },
     ];
-    const posiblePositions: IPosition[] = posiblePositionsByDirection(fromPosition,grid,directions,2);
-    if (this.color===0 && this.isMoved===false && grid[7][7]?.isMoved===false && grid[7][5]===null && grid[7][6]===null) posiblePositions.push({x:fromPosition.x+2,y:fromPosition.y});
-    if (this.color===1 && this.isMoved===false && grid[0][0]?.isMoved===false && grid[0][2]===null && grid[0][1]===null) posiblePositions.push({x:fromPosition.x-2,y:fromPosition.y});
+    const posiblePositions: IPosition[] = posiblePositionsByDirection(fromPosition, grid, directions, 2);
+    if (this.color === 0 && this.isMoved === false && grid[7][7]?.isMoved === false && grid[7][5] === null && grid[7][6] === null) {
+      posiblePositions.push({x:fromPosition.x+2,y:fromPosition.y});
+    } 
+    if (this.color === 1 && this.isMoved === false && grid[0][0]?.isMoved === false && grid[0][2] === null && grid[0][1] === null) {
+      posiblePositions.push({x:fromPosition.x-2,y:fromPosition.y});
+    }
       return posiblePositions;
   }
 }

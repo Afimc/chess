@@ -1,11 +1,10 @@
-import {gameStore} from "../../core/PageStores"
+import { gameStore } from "../../core/PageStores"
 import NewGameGenerator from "./New-game-generator/NewGameGenerator"
 import ChooseGame from "./Chooose-game/ChooseGame"
 
-
 const Loby = () => {
-    const onNewGame = gameStore((state) => state.onNewGame)
-    
+    const onNewGame = gameStore((state) => state.onNewGame);
+
     return (
         <>
             {
@@ -17,7 +16,7 @@ const Loby = () => {
     )
 }
 
-export default Loby
+export default Loby;
 
 
 

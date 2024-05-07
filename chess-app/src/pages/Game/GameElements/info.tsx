@@ -4,7 +4,6 @@ import { socket } from "../../../core/sockets";
 import { updatedDataStore } from "../../../core/InGameStore";
 import { EMIT, IHistoryTurn } from "../../../core/Interfaces";
 
-
 const Info = () => {
     const startStopGame = gameStore((state) => state.startStopGame);
     const playerColor = updatedDataStore((state) => state.playerColor);
@@ -33,14 +32,14 @@ const Info = () => {
         <div className="gameInfo">
             <button onClick={() => exitGame()}>Exit</button>
             <div className="onTurn">
-                <p>{IsonTurn() === playerColor ? `you are on turn with ${playerColor === 1 ? 'White' : 'Black'}` : 'wait'}</p>
+                <p>{IsonTurn() === playerColor ? `you are on turn with ${playerColor === 1 ? 'White' : 'Black'}` : 'wait'} </p>
             </div>
             <div className="history">
                 {
                     history.map((turn: IHistoryTurn) => {
                         const stringifyedTurnHistory = getStringifyTurnHistory(turn);
                         return (
-                            <div className="turn">{stringifyedTurnHistory}</div>
+                            <div className="turn">{stringifyedTurnHistory} </div>
                         );
                     })
                 }

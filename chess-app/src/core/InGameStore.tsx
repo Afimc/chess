@@ -23,5 +23,5 @@ export const updatedDataStore = create<IUpdatedDataStore>()((set)=>({
     setUpdatedBoard: (s)=>set(()=>({ updatedBoard:s })),
     setHistory: (s)=>set(()=>({ history:s })),
     setNumberOfGames: (s)=>set(()=>({numberOfGames:s})),
-        
+     
 }))

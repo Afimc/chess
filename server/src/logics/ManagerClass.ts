@@ -15,14 +15,14 @@ export class GamesManager {
     return this._games;
   }
 
-  addGame(nickName:string, password:string, gameName:string, gamesManager:GamesManager, socket:Socket) {
+  addGame(nickName: string, password: string, gameName: string, gamesManager: GamesManager, socket: Socket) {
     try {
       const playerOne = new Player(socket, nickName);
       if(gameName===''){
         throw new Error("enter Game Name");
       }
       const gameExist = this.allGames.some(game=>game.gameName === gameName)
-      if(gameExist===true){
+      if(gameExist === true){
         throw new Error("GameName already exist");
       }
       const game = new Game(playerOne, password, gameName);
@@ -32,18 +32,17 @@ export class GamesManager {
       socket.emit(EMIT.ERROR, error.message);
       console.log(error.message);
     }
-
   }
 
   sendWaitingListToAll(gamesManager: GamesManager) {
     const freeGamesInfo = gamesManager.freeGamesInfo;
-    const numberOfGames = this._games.length
-    this.io.emit(EMIT.NEWWAITINGLIST, freeGamesInfo,numberOfGames);
+    const numberOfGames = this._games.length;
+    this.io.emit(EMIT.NEWWAITINGLIST, freeGamesInfo, numberOfGames);
   }
 
   sendWaitingListToSinglePlayer(gamesManager: GamesManager, socket: Socket) {
     const freeGamesInfo = gamesManager.freeGamesInfo;
-    const numberOfGames = this._games.length
+    const numberOfGames = this._games.length;
 
     socket.emit(EMIT.NEWWAITINGLIST, freeGamesInfo, numberOfGames);
   }
@@ -73,7 +72,6 @@ export class GamesManager {
       pickedGame.playerTwo = new Player(socket, nickName2);
       this.sendWaitingListToAll(gamesManager);
       pickedGame.startGame();
-     
     } catch (error) {
       socket.emit(EMIT.ERROR, error.message);
       console.log(error.message);

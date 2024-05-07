@@ -6,7 +6,7 @@ import { ChessBoard } from "./board";
 import { castling, checkForMatt, getPieceToReborn, positionConvertToString, } from "./inGame_functions";
 
 export class Game {
-  gameName:string;
+  gameName: string;
   private _password: string;
   playerOne: Player;
   playerTwo: Player | null = null;
@@ -19,7 +19,7 @@ export class Game {
   
 
   constructor(playerOne: Player, password: string, gameName:string) {
-    this.gameName = gameName
+    this.gameName = gameName;
     this._password = password;
     this.playerOne = playerOne;
     this.uuid = uuidv4();
@@ -62,49 +62,44 @@ export class Game {
     this.graveyard.push(pieceToKill);
   }
 
-  resurrection(color:number, type:string, pos:IPosition){
-    const pieceToReborn = getPieceToReborn(this.graveyard,color,type)
-    const pieceToSacrrifice = this.board.grid[pos.y][pos.x]
-    this.board.grid[pos.y][pos.x] = pieceToReborn[0]
-    this.history[0]._pieceToResorect = pieceToReborn[0].type
-    this.graveyard=this.graveyard.filter(p=> p  !== pieceToReborn[0])
-    this.moveToGraveyard(pieceToSacrrifice)
+  resurrection(color:number, type: string, pos: IPosition) {
+    const pieceToReborn = getPieceToReborn(this.graveyard,color,type);
+    const pieceToSacrrifice = this.board.grid[pos.y][pos.x];
+    this.board.grid[pos.y][pos.x] = pieceToReborn[0];
+    this.history[0]._pieceToResorect = pieceToReborn[0].type;
+    this.graveyard=this.graveyard.filter(p=>p  !== pieceToReborn[0]);
+    this.moveToGraveyard(pieceToSacrrifice);
     this.updateData();
   }
  
-  addToHistory(pieceToMove: Piece, pieceToKill: Piece, fromPosition: IPosition, toPosition: IPosition,pieceToReborn:Piece) {
+  addToHistory(pieceToMove: Piece, pieceToKill: Piece, fromPosition: IPosition, toPosition: IPosition, pieceToReborn: Piece) {
     const addTurn: IHistoryTurn = {
       _fromPosition: positionConvertToString(fromPosition),
       _toPosition: positionConvertToString(toPosition),
-      _pieceToMove: `${pieceToMove.color === 1 ? "White" : "Black"} ${pieceToMove.type} `,
-      _pieceToKill: pieceToKill ? `${pieceToKill.color === 1 ? "White" : "Black"} ${pieceToKill.type} ` : null,
+      _pieceToMove: `${pieceToMove.color === 1 ? "White" : "Black"} ${pieceToMove.type}`,
+      _pieceToKill: pieceToKill ? `${pieceToKill.color === 1 ? "White" : "Black"} ${pieceToKill.type}` : null,
       _turn: this.turns.toString(),
-      _pieceToResorect:pieceToReborn ? `${pieceToReborn.color === 1 ? "White" : "Black"} ${pieceToReborn.type} ` : null,
+      _pieceToResorect: pieceToReborn ? `${pieceToReborn.color === 1 ? "White" : "Black"} ${pieceToReborn.type}` : null,
     };
     this.history.unshift(addTurn);
   }
   
-
   move(moveData: IMoveData, player: Player) {
-    console.log('\n\n*****\n\n')
-   
     const { fromPosition, toPosition } = moveData;
     const pieceToMove = this.board.grid[fromPosition.y][fromPosition.x];
     if (!pieceToMove) {
       player.socket.emit(EMIT.ERROR, "chosse a piece");
       return;
     }
-    const posiblePositions = pieceToMove.posiblePositions2(fromPosition,this.board);
+    const posiblePositions = pieceToMove.posiblePositions2(fromPosition, this.board);
     const aveilablePosiblePositions = posiblePositions.find((positon) => positon?.x === toPosition?.x && positon?.y === toPosition?.y);
     if (!aveilablePosiblePositions) return;
     const pieceToKill = this.board.grid[toPosition.y][toPosition.x];
     if (pieceToKill) this.moveToGraveyard(pieceToKill);
-    console.log({Bql:this.board.grid[0][3]?.isMoved,Cheren:this.board.grid[7][4]?.isMoved})
     if (pieceToMove.type === EPiece.KING) castling(this.board.grid,fromPosition,toPosition,pieceToMove);
     if (pieceToMove.type === EPiece.PAWN && (toPosition.y===0||toPosition.y===7)) {
-      player.socket.emit(EMIT.PIECEREQUEST)
+      player.socket.emit(EMIT.PIECEREQUEST);
     }
-
     this.board.grid[toPosition.y][toPosition.x] = pieceToMove;
     this.board.grid[fromPosition.y][fromPosition.x] = null;
     this.turns = this.turns + 1;
@@ -112,20 +107,18 @@ export class Game {
     this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition, null);
     this.updateData();
     checkForMatt(player, this.board)
-    
-    
   }
 
   private startListenForEvents() {
-    const players = [this.playerOne, this.playerTwo]
-    players.forEach(Player=>{
-      Player.socket.on(ON.MOVE, (moveData:IMoveData) => {
+    const players = [this.playerOne, this.playerTwo];
+    players.forEach(Player => {
+      Player.socket.on(ON.MOVE, (moveData: IMoveData) => {
         this.move(moveData, Player);
       });
-      Player.socket.on(ON.PIECETOREBORN,(color:number, type:string, pos:IPosition)=>{ 
+      Player.socket.on(ON.PIECETOREBORN,(color:number, type:string, pos:IPosition) => { 
         this.resurrection(color, type, pos)
       });
-    })
+    });
   }
 
   startGame() {

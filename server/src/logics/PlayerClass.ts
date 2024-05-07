@@ -18,6 +18,6 @@ export class Player {
   }
 
   public get color() : EColor {
-    return this._color
+    return this._color;
   }
 }
