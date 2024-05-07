@@ -1,16 +1,8 @@
-//да се сложат картинките в папки +++
-// да променя заглавието в индекса +++
-// да вкарам хедъра вътре в апа +++
-// да има инпут за име на играта и да го праща него а не имието на играча
-// отделни елементи за геим ретърна 
-// da prashta kolko igri se igraqt v momenta 
-
 
 import { useEffect} from "react"
 import { socket } from "./core/sockets"
 import Game from "./pages/Game/Game"
 import Loby from './pages/Loby/Loby'
-import './App.scss'
 import { gameStore } from "./core/PageStores"
 import { updatedDataStore } from "./core/InGameStore"
 import { EMIT, IGameInfo, IUpdatedData, ON } from "./core/Interfaces"
@@ -28,11 +20,12 @@ const App = () => {
   const setHistory = updatedDataStore((state)=>state.setHistory)
   const setInfo = updatedDataStore((state)=>state.setInfo)
   const setGraveyard = updatedDataStore((state)=>state.setGraveyard)
+  const setNumberOfGames = updatedDataStore((state)=>state.setNumberOfGames)
   
   
-
   useEffect(() => {
-    socket.on(ON.NEWWAITINGLIST, (list: IGameInfo[]) => {
+    socket.on(ON.NEWWAITINGLIST, (list: IGameInfo[],numberOfGames:number) => {
+      setNumberOfGames(numberOfGames)
       setWaitingList(list)
     });
 
@@ -55,7 +48,6 @@ const App = () => {
     })
 
     socket.on(ON.PIECEREQUEST,()=>{
-      console.log('request')
       setOnRebornRequest(true)
     })
 

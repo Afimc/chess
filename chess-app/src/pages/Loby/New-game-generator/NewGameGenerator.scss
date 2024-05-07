@@ -1,0 +1,65 @@
+.onNewGame {
+  box-shadow: 0px 0px 20px 20px #764320;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 500px;
+  height: 400px;
+
+  .inputs {
+    display: flex;
+    flex-direction: column;
+
+    #NickNameInput {
+      box-shadow: 0px 0px 10px 10px #764320;
+      background-image: url("/wooden-background.jpg");
+      font-size: large;
+      margin-top: 20px;
+      display: flex;
+      align-self: center;
+      width: 80%;
+      height: 50px;
+    }
+
+    #GameNameInput {
+      box-shadow: 0px 0px 10px 10px #764320;
+      background-image: url("/wooden-background.jpg");
+      font-size: large;
+      margin-top: 20px;
+      display: flex;
+      align-self: center;
+      width: 80%;
+      height: 50px;
+    }
+
+    #PasswordInput {
+      box-shadow: 0px 0px 10px 10px #764320;
+      background-image: url("/wooden-background.jpg");
+      font-size: large;
+      margin-top: 20px;
+      display: flex;
+      align-self: center;
+      width: 80%;
+      height: 50px;
+    }
+  }
+
+  .buttons {
+    box-shadow: 0px 0px 10px 10px #764320;
+    height: 50px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-around;
+    
+    button {
+      box-shadow: 0px 0px 10px 10px #764320;
+      background-image: url("/wooden-background.jpg");
+      font-size: large;
+      border: none;
+    }
+  }
+}

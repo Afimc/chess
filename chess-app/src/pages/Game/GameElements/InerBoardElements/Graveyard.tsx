@@ -1,7 +1,8 @@
+import './Graveyard.scss';
 import { useState } from "react"
-import { updatedDataStore } from "../../../core/InGameStore";
+import { updatedDataStore } from "../../../../core/InGameStore";
 
-const Graveyard = ({props}:any) => {
+const Graveyard = (props:{color:number}) => {
   const graveyard = updatedDataStore((state)=>state.graveyard)
   const [whitePiecesFromGraveyard,setWhitePiecesFromGraveyard] = useState<string[]>([])
   const [blackPiecesFromGraveyard,setBlackPiecesFromGraveyard] = useState<string[]>([])
@@ -18,21 +19,21 @@ function getGraveyard(color:number){
   return (
     <>
         {
-        props === 1 
-        ? <div className="whiteGraveyard" onMouseLeave={()=>setWhitePiecesFromGraveyard([])} onMouseOver={()=>getGraveyard(props)}>
+        props.color === 1 
+        ? <div className="graveyard" onMouseLeave={()=>setWhitePiecesFromGraveyard([])} onMouseOver={()=>getGraveyard(props.color)}>
             { 
             whitePiecesFromGraveyard.map((piece)=>{
                 return(
-                <img id="whiteGraveyardImages" src={`piecesImages/${piece}.png` || ''} alt="" />
+                <img id="graveyardImages" src={`piecesImages/${piece}.png` || ''} alt="" />
                 )
             })
             }
         </div>
-        :<div className="blackGraveyard" onMouseLeave={()=>setBlackPiecesFromGraveyard([])} onMouseOver={()=>getGraveyard(props)} >
+        :<div className="graveyard" onMouseLeave={()=>setBlackPiecesFromGraveyard([])} onMouseOver={()=>getGraveyard(props.color)} >
             {
             blackPiecesFromGraveyard.map((piece)=>{
                 return(
-                <img id="blackGraveyardImages" src={`piecesImages/${piece}.png` || ''} alt="" />
+                <img id="graveyardImages" src={`piecesImages/${piece}.png` || ''} alt="" />
                 )
             })
             }

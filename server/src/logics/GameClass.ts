@@ -99,6 +99,7 @@ export class Game {
     if (!aveilablePosiblePositions) return;
     const pieceToKill = this.board.grid[toPosition.y][toPosition.x];
     if (pieceToKill) this.moveToGraveyard(pieceToKill);
+    console.log({Bql:this.board.grid[0][3]?.isMoved,Cheren:this.board.grid[7][4]?.isMoved})
     if (pieceToMove.type === EPiece.KING) castling(this.board.grid,fromPosition,toPosition,pieceToMove);
     if (pieceToMove.type === EPiece.PAWN && (toPosition.y===0||toPosition.y===7)) {
       player.socket.emit(EMIT.PIECEREQUEST)

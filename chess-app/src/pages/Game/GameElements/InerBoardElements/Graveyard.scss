@@ -1,0 +1,12 @@
+
+.graveyard{
+    width: 100%;
+    height: 5%;
+    display: flex;
+    justify-content: center;
+
+        #graveyardImages{
+            width: calc(100%/16);
+            height: 100%;
+        }
+}

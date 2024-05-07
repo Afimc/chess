@@ -1,20 +1,19 @@
 import './Reborn.scss';
-import { gameStore } from "../../../core/PageStores";
-import { socket } from "../../../core/sockets";
-import { updatedDataStore } from "../../../core/InGameStore";
-import { EMIT, IPiece, } from "../../../core/Interfaces";
+import { gameStore } from "../../../../core/PageStores";
+import { socket } from "../../../../core/sockets";
+import { updatedDataStore } from "../../../../core/InGameStore";
+import { EMIT, IPiece, Iposition, } from "../../../../core/Interfaces";
 
-const Reborn = ({props}:any) => {
+const Reborn = (props:{toPositon?:Iposition}) => {
   const onRebornRequest = gameStore((state)=>state.onRebornRequest)
   const playerColor = updatedDataStore((state) => state.playerColor)
   const graveyard = updatedDataStore((state)=>state.graveyard)
   const setOnRebornRequest = gameStore((state)=>state.setOnRebornRequest)
 
   function sendPieceForReborn(color:number, type:string){
-    socket.emit(EMIT.PIECETOREBORN, color, type,props)
+    socket.emit(EMIT.PIECETOREBORN, color, type, props.toPositon)
     setOnRebornRequest(false)
   }
-
 
   return (
 
@@ -32,8 +31,7 @@ const Reborn = ({props}:any) => {
                 )
               })
             }
-          </div>
-              
+          </div>     
   )
 }
 

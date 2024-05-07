@@ -1,7 +1,7 @@
-import { Piece } from "./PiecesClass";
+import { BISHOP, KING, KNIGHT, PAWN, Piece, QUEEN, ROOK } from "./PiecesClass";
 import { Player } from "./PlayerClass";
 import { ChessBoard } from "./board";
-import { EPiece, IPosition, TGrid } from "./types";
+import { EColor, EPiece, IPosition, TGrid } from "./types";
 
 function checkForCheck(boardGridCopy: (Piece | null)[][], test: Piece) {
   const enemyPieces = boardGridCopy.map((row, y) => {
@@ -36,6 +36,36 @@ function checkForCheck(boardGridCopy: (Piece | null)[][], test: Piece) {
 
   if (!curentKingPosition) return false;
   return checkPositions.some((cp: IPosition) =>cp.x === curentKingPosition.x && cp.y === curentKingPosition.y);
+}
+
+export function CreateBoard(){
+  const w_Pawn = new PAWN(EColor.WHITE);
+  const w_Rook = new ROOK(EColor.WHITE);
+  const w_Rook2 = new ROOK(EColor.WHITE);
+  const w_Knight = new KNIGHT(EColor.WHITE);
+  const w_Bishop = new BISHOP(EColor.WHITE);
+  const w_Queen = new QUEEN(EColor.WHITE);
+  const w_King = new KING(EColor.WHITE);
+  
+  const b_Pawn = new PAWN(EColor.BLACK);
+  const b_Rook = new ROOK(EColor.BLACK);
+  const b_Rook2 = new ROOK(EColor.BLACK);
+  const b_Knight = new KNIGHT(EColor.BLACK);
+  const b_Bishop = new BISHOP(EColor.BLACK);
+  const b_Queen = new QUEEN(EColor.BLACK);
+  const b_King = new KING(EColor.BLACK);
+ 
+  const grid:TGrid= [
+    [w_Rook, w_Knight, w_Bishop, w_King, w_Queen, w_Bishop, w_Knight, w_Rook2],
+    [w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn, b_Pawn],
+    [b_Rook, b_Knight, b_Bishop, b_Queen, b_King, b_Bishop, b_Knight, b_Rook2],
+  ];
+  return grid
 }
 
 export function checkForMatt(player:Player, board:ChessBoard){
@@ -103,6 +133,8 @@ export function isSafeToMove(fromPosition2: IPosition,toPosition: IPosition,boar
 }
 
 export function castling(grid:TGrid,fromPosition:IPosition, toPosition:IPosition,pieceToMove:Piece){
+  if (pieceToMove.color===0 && (pieceToMove.isMoved===true || grid[7][7]?.isMoved===true || grid[7][5]!==null || grid[7][6]!==null || toPosition.x!==6 || toPosition.y!==7))return;
+  if (pieceToMove.color===1 && (pieceToMove.isMoved===true || grid[0][0]?.isMoved===true || grid[0][2]!==null || grid[0][1]!==null || toPosition.x!==1 || toPosition.y!==0))return;
   const pieceToSwap = pieceToMove.color===1 ? grid[0][0] : grid[7][7]
   grid[toPosition.y][toPosition.x] = pieceToMove;
   grid[fromPosition.y][fromPosition.x] = null;

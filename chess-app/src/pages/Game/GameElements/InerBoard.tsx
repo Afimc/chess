@@ -1,15 +1,16 @@
-import { useState } from "react"
+import './InerBoard.scss';
+import { useState } from "react";
 import { updatedDataStore } from "../../../core/InGameStore";
 import { EMIT, IPieceWithPositon, Iposition } from "../../../core/Interfaces";
 import { socket } from "../../../core/sockets";
-import Reborn from "./Reborn";
-import Graveyard from "./Graveyard";
+import Reborn from "./InerBoardElements/Reborn";
+import Graveyard from "./InerBoardElements/Graveyard";
 
 const InerBoard = () => {
   const currentBoard = updatedDataStore((state) => state.updatedBoard)
   const playerColor = updatedDataStore((state) => state.playerColor)
-  const turns = updatedDataStore((state)=>state.turns)
-  
+  const turns = updatedDataStore((state) => state.turns)
+
   const [posiblePositions, setPosiblePositions] = useState<Iposition[]>([])
   const [ableToTrack, setAbleToTrack] = useState(false)
   const [currentMovePosition, setCurrentMovePosition] = useState<Iposition | null>()
@@ -17,7 +18,7 @@ const InerBoard = () => {
   const [fromPosition, setFromPosition] = useState<Iposition>()
   const [toPosition, setToPosition] = useState<Iposition>()
 
-  function IsonTurn(){
+  function IsonTurn() {
     const isOnTurn = turns % 2 === 0 ? 1 : 0
     return isOnTurn
   }
@@ -27,7 +28,7 @@ const InerBoard = () => {
     if (!pieceWithPosiblePositions) return null
     const color = pieceWithPosiblePositions?.piece._color === 1 ? 'W' : 'B'
     const type = pieceWithPosiblePositions?.piece._type
-    return `${color}_${type}`
+    return `${color}_${type}`;
   }
 
   function onMouseDown(y: number, x: number) {
@@ -39,9 +40,9 @@ const InerBoard = () => {
       setAbleToTrack(true)
       setFromPosition({ x, y })
     }
- }
-  
- function onMouseUp() {
+  }
+
+  function onMouseUp() {
     if (ableToTrack) {
       setPosiblePositions([])
       setAbleToTrack(false)
@@ -59,54 +60,56 @@ const InerBoard = () => {
       }
     }
   }
-  
+
   function sendMoveRequest() {
     const dataMove = { fromPosition, toPosition }
     socket.emit(EMIT.MOVE, dataMove)
   }
 
   return (
-    <div className="iner-board" onMouseUp={() => onMouseUp()}>
-    <Reborn  props = {toPosition}/>
-    <Graveyard props = {1}/>
-    {
-      !currentBoard
-        ? null
-        : currentBoard.map((row: IPieceWithPositon[], y: number) => {
-          return (
-            <div className="row" >
-              {
-                row.map((_col: IPieceWithPositon, x: number) => {
-                  return (
-                    <>
-                      <div 
-                        className="cell"
-                        style={{ cursor: getPiece(y, x) ? "move" : "unset" }}
-                        onMouseDown={() => { onMouseDown(y, x) }}
-                        onMouseMove={() => onCellMouseMove(y, x)}
-                      >
-                        <img src={`piecesImages/${getPiece(y, x)}.png` || ''} alt="" />
-                        <div className="posiblePositions"
-                          style={{ border: posiblePositions.find((pos) => pos.x === x && pos.y === y) ? "2px solid green" : "" }}>
-                        </div>
-                        {
-                          currentMovePosition?.x === x && currentMovePosition?.y === y && posiblePositions.find((pos) => pos.x === x && pos.y == y) && movingImg
-                            ? <div className="movingImgPositions">
-                              <img src={`piecesImages/${movingImg}.png` || ''} alt="" />
+    <div className="bord">
+      <div className="iner-board" onMouseUp={() => onMouseUp()}>
+        <Reborn toPositon={toPosition} />
+        <Graveyard color={1} />
+        {
+          !currentBoard
+            ? null
+            : currentBoard.map((row: IPieceWithPositon[], y: number) => {
+              return (
+                <div className="row" >
+                  {
+                    row.map((_col: IPieceWithPositon, x: number) => {
+                      return (
+                        <>
+                          <div
+                            className="cell"
+                            style={{ cursor: getPiece(y, x) ? "move" : "unset" }}
+                            onMouseDown={() => { onMouseDown(y, x) }}
+                            onMouseMove={() => onCellMouseMove(y, x)}
+                          >
+                            <img src={`piecesImages/${getPiece(y, x)}.png` || ''} alt="" />
+                            <div className="posiblePositions"
+                              style={{ border: posiblePositions.find((pos) => pos.x === x && pos.y === y) ? "2px solid green" : "" }}>
                             </div>
-                            : null
-                        }
-                      </div>
-                    </>
-                  )
-                })
-              }
-            </div>
-          )
-        })
-    }
-    <Graveyard props = {0}/>
-  </div>
+                            {
+                              currentMovePosition?.x === x && currentMovePosition?.y === y && posiblePositions.find((pos) => pos.x === x && pos.y == y) && movingImg
+                                ? <div className="movingImgPositions">
+                                  <img src={`piecesImages/${movingImg}.png` || ''} alt="" />
+                                </div>
+                                : null
+                            }
+                          </div>
+                        </>
+                      )
+                    })
+                  }
+                </div>
+              )
+            })
+        }
+        <Graveyard color={0} />
+      </div>
+    </div>
   )
 }
 

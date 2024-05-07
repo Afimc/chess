@@ -13,6 +13,7 @@ export const updatedDataStore = create<IUpdatedDataStore>()((set)=>({
     graveyard:[],
     whitePlayerId:'',
     history:[],
+    numberOfGames:0,
     
     setWaitingList: (s)=>set(()=>({ waitingList: s })),
     setPlayerColor: (s)=>set(()=>({ playerColor:s })),
@@ -21,5 +22,6 @@ export const updatedDataStore = create<IUpdatedDataStore>()((set)=>({
     setGraveyard: (s)=>set(()=>({graveyard:s})),
     setUpdatedBoard: (s)=>set(()=>({ updatedBoard:s })),
     setHistory: (s)=>set(()=>({ history:s })),
+    setNumberOfGames: (s)=>set(()=>({numberOfGames:s})),
         
 }))
