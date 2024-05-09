@@ -2,7 +2,6 @@ import { Server, Socket } from "socket.io";
 import { GamesManager } from "./logics/ManagerClass";
 import { ON } from "./logics/types";
 
-
 function handleSockets(io: Server, gamesManager: GamesManager) {
   io.on(ON.CONNECTION, (socket: Socket) => onConnection(gamesManager, socket));
 }
