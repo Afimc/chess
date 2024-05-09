@@ -1,14 +1,14 @@
-import './Game.scss'
+import './Game.scss';
 import Info from "./GameElements/Info";
 import InerBoard from "./GameElements/InerBoard";
 
 const Game = () => {
   return (
-    <div className="game" >
+    <div className="game">
       <Info />
       <InerBoard />
     </div>  
-  )
+  );
 }
 
-export default Game
+export default Game;

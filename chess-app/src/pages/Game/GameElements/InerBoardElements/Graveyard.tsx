@@ -40,7 +40,7 @@ const Graveyard = (props: { color: number }) => {
           </div>
       }
     </>
-  )
+  );
 }
 
-export default Graveyard
+export default Graveyard;

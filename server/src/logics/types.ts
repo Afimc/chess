@@ -20,7 +20,7 @@ export interface IHistoryTurn {
   _fromPosition: string,
   _toPosition: string,
   _pieceToMove: string,
-  _pieceToKill: string|null,
+  _pieceToKill: string | null,
   _turn: string,
   _pieceToResorect: string,
 }
@@ -60,4 +60,4 @@ export enum EMIT {
 
 }
 
-export type TGrid = (Piece | null)[][]
+export type TGrid = (Piece | null)[][];

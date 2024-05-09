@@ -4,14 +4,14 @@ import { TGrid } from "./types";
 export class ChessBoard {
   grid: TGrid = CreateBoard();
 
-  get gridWithPosiblePOsitions(){
+  get gridWithPosiblePOsitions() {
     return this.grid.map((row, y) => {
       return row.map((piece, x) => {
-        if(!piece)return null;
+        if (!piece) return null;
         return {
             piece: piece,
             posiblePositions: piece.posiblePositions2({x, y}, this)
-        }
+        };
       });
     });
   }
@@ -19,8 +19,4 @@ export class ChessBoard {
   cloneGrid(): TGrid{
     return this.grid.map((row) => row.map((piece) => piece));
   }
-
-
 }
- 
-

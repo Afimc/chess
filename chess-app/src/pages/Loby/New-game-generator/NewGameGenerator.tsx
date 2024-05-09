@@ -47,7 +47,7 @@ const NewGameGenerator = () => {
                 <button onClick={() => setOnNewGame(false)}>Cancel</button>
             </div>
         </div>
-    )
+    );
 }
 
 export default NewGameGenerator;

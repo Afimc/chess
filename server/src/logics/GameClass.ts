@@ -6,8 +6,8 @@ import { ChessBoard } from "./board";
 import { castling, checkForMatt, getPieceToReborn, positionConvertToString, } from "./inGame_functions";
 
 export class Game {
-  gameName: string;
   private _password: string;
+  gameName: string;
   playerOne: Player;
   playerTwo: Player | null = null;
   uuid: string;
@@ -17,8 +17,7 @@ export class Game {
   whitePlayerId: string;
   history: IHistoryTurn[] = [];
   
-
-  constructor(playerOne: Player, password: string, gameName:string) {
+  constructor(playerOne: Player, password: string, gameName: string) {
     this.gameName = gameName;
     this._password = password;
     this.playerOne = playerOne;
@@ -63,11 +62,11 @@ export class Game {
   }
 
   resurrection(color:number, type: string, pos: IPosition) {
-    const pieceToReborn = getPieceToReborn(this.graveyard,color,type);
+    const pieceToReborn = getPieceToReborn(this.graveyard, color, type);
     const pieceToSacrrifice = this.board.grid[pos.y][pos.x];
     this.board.grid[pos.y][pos.x] = pieceToReborn[0];
     this.history[0]._pieceToResorect = pieceToReborn[0].type;
-    this.graveyard=this.graveyard.filter(p=>p  !== pieceToReborn[0]);
+    this.graveyard=this.graveyard.filter(p=>p !== pieceToReborn[0]);
     this.moveToGraveyard(pieceToSacrrifice);
     this.updateData();
   }
@@ -97,16 +96,16 @@ export class Game {
     const pieceToKill = this.board.grid[toPosition.y][toPosition.x];
     if (pieceToKill) this.moveToGraveyard(pieceToKill);
     if (pieceToMove.type === EPiece.KING) castling(this.board.grid,fromPosition,toPosition,pieceToMove);
-    if (pieceToMove.type === EPiece.PAWN && (toPosition.y===0||toPosition.y===7)) {
+    if (pieceToMove.type === EPiece.PAWN && (toPosition.y === 0 || toPosition.y === 7)) {
       player.socket.emit(EMIT.PIECEREQUEST);
     }
     this.board.grid[toPosition.y][toPosition.x] = pieceToMove;
     this.board.grid[fromPosition.y][fromPosition.x] = null;
     this.turns = this.turns + 1;
-    pieceToMove.setIsMoved = true
+    pieceToMove.setIsMoved = true;
     this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition, null);
     this.updateData();
-    checkForMatt(player, this.board)
+    checkForMatt(player, this.board);
   }
 
   private startListenForEvents() {
@@ -115,8 +114,8 @@ export class Game {
       Player.socket.on(ON.MOVE, (moveData: IMoveData) => {
         this.move(moveData, Player);
       });
-      Player.socket.on(ON.PIECETOREBORN,(color:number, type:string, pos:IPosition) => { 
-        this.resurrection(color, type, pos)
+      Player.socket.on(ON.PIECETOREBORN, (color: number, type: string, pos: IPosition) => { 
+        this.resurrection(color, type, pos);
       });
     });
   }

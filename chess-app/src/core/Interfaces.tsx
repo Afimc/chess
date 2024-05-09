@@ -1,31 +1,31 @@
-
 export interface IPieceWithPositon {
-  piece: IPiece,
-  posiblePositions: Iposition[]
+  piece: IPiece;
+  posiblePositions: Iposition[];
 }
+
 export interface Iposition {
-  x: number,
-  y: number,
+  x: number;
+  y: number;
 }
 
 export interface IPiece {
-  _color: number,
-  _type: '',
+  _color: number;
+  _type: '';
 }
 
 export interface IGameInfo {
-  gameID: string
+  gameID: string;
   gameName: string;
   isLocked: boolean;
 }
 
 export interface IHistoryTurn {
-  _fromPosition: string,
-  _toPosition: string,
-  _pieceToMove: string,
-  _pieceToKill: string | null,
-  _turn: string,
-  _pieceToResorect: string | null
+  _fromPosition: string;
+  _toPosition: string;
+  _pieceToMove: string;
+  _pieceToKill: string | null;
+  _turn: string;
+  _pieceToResorect: string | null;
 }
 
 export interface IUpdatedData {
@@ -34,7 +34,7 @@ export interface IUpdatedData {
   turns: number;
   graveyard: IPiece[];
   whitePlayerId: string;
-  history: IHistoryTurn[]
+  history: IHistoryTurn[];
 
 }
 
@@ -77,7 +77,7 @@ export interface IUpdatedDataStore {
   graveyard: IPiece[];
   whitePlayerId: string;
   history: IHistoryTurn[];
-  numberOfGames: number
+  numberOfGames: number;
 
   setWaitingList: (s: IGameInfo[]) => void;
   setPlayerColor: (s: number) => void;

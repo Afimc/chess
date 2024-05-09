@@ -3,8 +3,12 @@ import { isSafeToMove, posiblePositionsByDirection } from "./inGame_functions";
 import { EColor, EPiece, IPosition, TGrid } from "./types";
 
 export class Piece { 
-  private _isMoved:boolean = false
-  constructor(private _type: EPiece, private _color: EColor) {}
+  private _isMoved: boolean = false;
+
+  constructor(
+    private _type: EPiece,
+    private _color: EColor,
+  ) {}
 
   public get type(): EPiece {
     return this._type;
@@ -14,11 +18,11 @@ export class Piece {
     return this._color;
   }
 
-  public get isMoved() : boolean {
-    return  this._isMoved;
+  public get isMoved(): boolean {
+    return this._isMoved;
   }
   
-  public set setIsMoved(v : boolean) {
+  public set setIsMoved(v: boolean) {
     this._isMoved = v;
   }
   
@@ -27,11 +31,11 @@ export class Piece {
   }
 
   posiblePositions2(fromPosition: IPosition, board: ChessBoard): IPosition[] {
-    const posiblePOsition = this.posiblePositions(fromPosition,board.grid).filter((pos) => {
+    const posiblePosition = this.posiblePositions(fromPosition, board.grid).filter((pos) => {
       const isSafe = isSafeToMove(fromPosition, pos, board, this);
       return isSafe;
     });
-    return posiblePOsition;
+    return posiblePosition;
   }
 }
 
@@ -156,10 +160,10 @@ export class KING extends Piece {
     ];
     const posiblePositions: IPosition[] = posiblePositionsByDirection(fromPosition, grid, directions, 2);
     if (this.color === 0 && this.isMoved === false && grid[7][7]?.isMoved === false && grid[7][5] === null && grid[7][6] === null) {
-      posiblePositions.push({x:fromPosition.x+2,y:fromPosition.y});
+      posiblePositions.push({ x: fromPosition.x+2, y: fromPosition.y });
     } 
     if (this.color === 1 && this.isMoved === false && grid[0][0]?.isMoved === false && grid[0][2] === null && grid[0][1] === null) {
-      posiblePositions.push({x:fromPosition.x-2,y:fromPosition.y});
+      posiblePositions.push({ x: fromPosition.x-2, y: fromPosition.y });
     }
       return posiblePositions;
   }
