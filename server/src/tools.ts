@@ -7,7 +7,7 @@ function handleSockets(io: Server, gamesManager: GamesManager) {
 }
 
 function onConnection( gamesManager: GamesManager, socket: Socket) {
-    console.log(` user ${socket.id} connected`);
+    console.log(`User ${socket.id} connected`);
     socket.on(ON.GAMEREQUEST, (nickName: string, password: string, gameName: string) => onRequest(nickName, password, gameName, gamesManager, socket));
     socket.on(ON.GAMEENTER, (gameID: string, password: string, nickName2: string) => OnGameEnter(gameID, password, nickName2, socket, gamesManager));
     socket.on(ON.REQUESTWAITINGLIST, () => onRequestWaitingList(socket, gamesManager));

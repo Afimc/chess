@@ -43,14 +43,13 @@ export class GamesManager {
   sendWaitingListToSinglePlayer(gamesManager: GamesManager, socket: Socket) {
     const freeGamesInfo = gamesManager.freeGamesInfo;
     const numberOfGames = this._games.length;
-
     socket.emit(EMIT.NEWWAITINGLIST, freeGamesInfo, numberOfGames);
   }
 
   removeGame(gameID: string, gamesManager: GamesManager) {
     const gameToQuit = this._games.find(game => game.uuid === gameID);
-    this._games = this._games.filter((game) => game.uuid !== gameID);
     gameToQuit?.stopGame();
+    this._games = this._games.filter((game) => game.uuid !== gameID);
     this.sendWaitingListToAll(gamesManager);
   }
 

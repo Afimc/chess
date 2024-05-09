@@ -21,7 +21,6 @@ const App = () => {
   const setGraveyard = updatedDataStore((state) => state.setGraveyard);
   const setNumberOfGames = updatedDataStore((state) => state.setNumberOfGames);
   
-  
   useEffect(() => {
     socket.on(ON.NEWWAITINGLIST, (list: IGameInfo[], numberOfGames: number) => {
       setNumberOfGames(numberOfGames);
@@ -49,7 +48,6 @@ const App = () => {
     socket.on(ON.PIECEREQUEST, () => {
       setOnRebornRequest(true);
     });
-
 
     socket.connect();
     socket.emit(EMIT.REQUESTWAITINGLIST);

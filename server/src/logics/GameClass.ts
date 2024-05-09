@@ -16,6 +16,7 @@ export class Game {
   turns: number = 0;
   whitePlayerId: string;
   history: IHistoryTurn[] = [];
+  rebornPosition: IPosition ;
   
   constructor(playerOne: Player, password: string, gameName: string) {
     this.gameName = gameName;
@@ -65,6 +66,8 @@ export class Game {
     const pieceToReborn = getPieceToReborn(this.graveyard, color, type);
     const pieceToSacrrifice = this.board.grid[pos.y][pos.x];
     this.board.grid[pos.y][pos.x] = pieceToReborn[0];
+    this.turns = this.turns + 1;
+    this.history[0]._turn = this.turns.toString()
     this.history[0]._pieceToResorect = pieceToReborn[0].type;
     this.graveyard=this.graveyard.filter(p=>p !== pieceToReborn[0]);
     this.moveToGraveyard(pieceToSacrrifice);
@@ -97,6 +100,8 @@ export class Game {
     if (pieceToKill) this.moveToGraveyard(pieceToKill);
     if (pieceToMove.type === EPiece.KING) castling(this.board.grid,fromPosition,toPosition,pieceToMove);
     if (pieceToMove.type === EPiece.PAWN && (toPosition.y === 0 || toPosition.y === 7)) {
+      this.rebornPosition = toPosition;
+      this.turns = this.turns - 1;
       player.socket.emit(EMIT.PIECEREQUEST);
     }
     this.board.grid[toPosition.y][toPosition.x] = pieceToMove;
@@ -114,8 +119,8 @@ export class Game {
       Player.socket.on(ON.MOVE, (moveData: IMoveData) => {
         this.move(moveData, Player);
       });
-      Player.socket.on(ON.PIECETOREBORN, (color: number, type: string, pos: IPosition) => { 
-        this.resurrection(color, type, pos);
+      Player.socket.on(ON.PIECETOREBORN, (color: number, type: string) => { 
+        this.resurrection(color, type, this.rebornPosition);
       });
     });
   }
