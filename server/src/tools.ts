@@ -9,11 +9,11 @@ function handleSockets(io: Server, gamesManager: GamesManager) {
 function onConnection( gamesManager: GamesManager, socket: Socket) {
     console.log(` user ${socket.id} connected`);
     socket.on(ON.GAMEREQUEST, (nickName: string, password: string, gameName: string) => onRequest(nickName, password, gameName, gamesManager, socket));
-    socket.on(ON.GAMEENTER, (gameID: string, password: string, nickName2: string) => OnGameEnter( gameID, password, nickName2, socket, gamesManager));
+    socket.on(ON.GAMEENTER, (gameID: string, password: string, nickName2: string) => OnGameEnter(gameID, password, nickName2, socket, gamesManager));
     socket.on(ON.REQUESTWAITINGLIST, () => onRequestWaitingList(socket, gamesManager));
-    socket.on(ON.EXIT, (gameID: string) => onExit(gameID,gamesManager));
-    socket.on(ON.DISCONNECT, () => onDisconnect(socket.id,gamesManager));
-    sendNewWaitingList(socket,gamesManager);
+    socket.on(ON.EXIT, (gameID: string) => onExit(gameID, gamesManager));
+    socket.on(ON.DISCONNECT, () => onDisconnect(socket.id, gamesManager));
+    sendNewWaitingList(socket, gamesManager);
 }
 
 function onRequest(nickName: string, password: string, gameName: string, gamesManager: GamesManager, socket: Socket) {
@@ -42,6 +42,5 @@ function OnGameEnter(gameID: string, password: string, nickName2: string, socket
 function sendNewWaitingList(socket: Socket, gamesManager: GamesManager) {
   gamesManager.sendWaitingListToSinglePlayer(gamesManager, socket);
 }
-
 
 export {handleSockets};

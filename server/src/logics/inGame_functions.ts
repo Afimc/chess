@@ -32,7 +32,7 @@ function checkForCheck(boardGridCopy: (Piece | null)[][], test: Piece) {
   }
 
   if (!curentKingPosition) return false;
-  return checkPositions.some((cp: IPosition) =>cp.x === curentKingPosition.x && cp.y === curentKingPosition.y);
+  return checkPositions.some((cp: IPosition) => cp.x === curentKingPosition.x && cp.y === curentKingPosition.y);
 }
 
 export function checkForMatt(player: Player, board: ChessBoard){
@@ -41,9 +41,9 @@ export function checkForMatt(player: Player, board: ChessBoard){
       if (!piece) return null;
       return piece.color === player.color? null : piece.posiblePositions2({ x, y },board);
     });
-}).flat(2).filter(pos=>pos!==null);
-const isMatt = enemyPosiblePositions.length === 0 ? true : false;
-return isMatt;
+  }).flat(2).filter(pos => pos !== null);
+  const isMatt = enemyPosiblePositions.length === 0 ? true : false;
+  return isMatt;
 }
 
 export function CreateBoard(){
@@ -63,7 +63,7 @@ export function CreateBoard(){
   const b_Queen = new QUEEN(EColor.BLACK);
   const b_King = new KING(EColor.BLACK);
  
-  const grid:TGrid= [
+  const grid: TGrid = [
     [w_Rook, w_Knight, w_Bishop, w_King, w_Queen, w_Bishop, w_Knight, w_Rook2],
     [w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn, w_Pawn],
     [null, null, null, null, null, null, null, null],
@@ -86,7 +86,7 @@ export function positionConvertToVector(position: string) {
 }
 
 export function positionConvertToString(vector: IPosition) {
-  const y = vector.y+1;
+  const y = vector.y + 1;
   const arr = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const x = arr[vector.x];
   const position = x + y;
@@ -102,13 +102,13 @@ export function posiblePositionsByDirection(fromPosition: IPosition, boardGrid: 
           const y = fromPosition.y + d.y*j;
           const pos = {x,y};
           const conditions = pos.x >= 0 && pos.x < boardGrid[0].length && pos.y >= 0 && pos.y < boardGrid.length;
-          if(fromPosition.x === x && fromPosition.y === y)continue;
+          if(fromPosition.x === x && fromPosition.y === y) continue;
           let stopOnNext = false;
           if (!conditions) return;
           if (boardGrid[pos.y][pos.x] !== null) {
             if (boardGrid[pos.y][pos.x].color !== myColor) {
               stopOnNext = true;
-            } else {return}
+            } else { return }
           }
           posiblePOsition.push(pos);
           if (stopOnNext) return;
@@ -127,8 +127,8 @@ export function isSafeToMove(fromPosition2: IPosition, toPosition: IPosition, bo
 }
 
 export function castling(grid: TGrid, fromPosition: IPosition, toPosition: IPosition, pieceToMove: Piece) {
-  if (pieceToMove.color===0 && (pieceToMove.isMoved===true || grid[7][7]?.isMoved===true || grid[7][5]!==null || grid[7][6]!==null || toPosition.x!==6 || toPosition.y!==7))return;
-  if (pieceToMove.color===1 && (pieceToMove.isMoved===true || grid[0][0]?.isMoved===true || grid[0][2]!==null || grid[0][1]!==null || toPosition.x!==1 || toPosition.y!==0))return;
+  if (pieceToMove.color===0 && (pieceToMove.isMoved===true || grid[7][7]?.isMoved===true || grid[7][5]!==null || grid[7][6]!==null || toPosition.x!==6 || toPosition.y!==7)) return;
+  if (pieceToMove.color===1 && (pieceToMove.isMoved===true || grid[0][0]?.isMoved===true || grid[0][2]!==null || grid[0][1]!==null || toPosition.x!==1 || toPosition.y!==0)) return;
   const pieceToSwap = pieceToMove.color===1 ? grid[0][0] : grid[7][7];
   grid[toPosition.y][toPosition.x] = pieceToMove;
   grid[fromPosition.y][fromPosition.x] = null;
@@ -148,5 +148,5 @@ export function getPieceToReborn(graveyard: Piece[], color: Number, type: string
       return piece.color === color && piece.type===type ? piece : null;
     }).filter(p => p !== null);
 
-return pieceToReborn;
+  return pieceToReborn;
 }

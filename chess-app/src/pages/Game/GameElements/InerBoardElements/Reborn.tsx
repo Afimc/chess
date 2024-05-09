@@ -31,7 +31,7 @@ const Reborn = (props: { toPositon?: Iposition }) => {
           })
       }
     </div>
-  )
+  );
 }
 
-export default Reborn
+export default Reborn;

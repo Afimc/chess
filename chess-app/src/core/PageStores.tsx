@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import { IGameStore } from './Interfaces'
+import { create } from 'zustand';
+import { IGameStore } from './Interfaces';
 
 export const gameStore = create<IGameStore>()((set) => ({
     inGame: false,
@@ -7,13 +7,6 @@ export const gameStore = create<IGameStore>()((set) => ({
     onRebornRequest: false,
 
     startStopGame: (s) => set(() => ({ inGame: s })),
-    setOnNewGame: (onNewGame) => set(() => ({ onNewGame })),
+    setOnNewGame: (s) => set(() => ({ onNewGame: s })),
     setOnRebornRequest: (s) => set(() => ({ onRebornRequest: s })),
-
-}))
-
-
-
-
-
-
+}));

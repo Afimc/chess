@@ -18,11 +18,11 @@ export class GamesManager {
   addGame(nickName: string, password: string, gameName: string, gamesManager: GamesManager, socket: Socket) {
     try {
       const playerOne = new Player(socket, nickName);
-      if(gameName===''){
+      if (gameName === '') {
         throw new Error("enter Game Name");
       }
-      const gameExist = this.allGames.some(game=>game.gameName === gameName)
-      if(gameExist === true){
+      const gameExist = this.allGames.some(game => game.gameName === gameName);
+      if (gameExist === true) {
         throw new Error("GameName already exist");
       }
       const game = new Game(playerOne, password, gameName);
@@ -59,7 +59,7 @@ export class GamesManager {
     password: string,
     nickName2: string,
     gamesManager: GamesManager,
-    socket: Socket
+    socket: Socket,
   ) {
     try {
       const pickedGame = this._games.find((game) => game.uuid === gameID);

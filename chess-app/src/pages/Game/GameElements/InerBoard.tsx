@@ -84,7 +84,7 @@ const InerBoard = () => {
                           <div
                             className="cell"
                             style={{ cursor: getPiece(y, x) ? "move" : "unset" }}
-                            onMouseDown={() => { onMouseDown(y, x) }}
+                            onMouseDown={() => onMouseDown(y, x)}
                             onMouseMove={() => onCellMouseMove(y, x)}
                           >
                             <img src={`piecesImages/${getPiece(y, x)}.png` || ''} alt="" />

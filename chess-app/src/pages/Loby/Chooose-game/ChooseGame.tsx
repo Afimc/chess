@@ -68,7 +68,7 @@ const ChooseGame = () => {
                     </div>
             }
         </>
-    )
+    );
 }
 
 export default ChooseGame;
