@@ -1,8 +1,6 @@
 .onNewGame {
-  box-shadow: 0px 0px 20px 20px #764320;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  box-shadow: 0px 0px 20px 20px #af8227bc;
+  background-color: rgba(0, 0, 0, 0.615);
   margin-top: 50px;
   display: flex;
   flex-direction: column;
@@ -15,8 +13,11 @@
     flex-direction: column;
 
     #NickNameInput {
-      box-shadow: 0px 0px 10px 10px #764320;
-      background-image: url("/wooden-background.jpg");
+      box-shadow: 0px 0px 5px 5px #af8227bc;
+      background-color: rgba(0, 0, 0, 0.615);
+      border-radius: 5px;
+      border: none;
+      color:#af8227bc;
       font-size: large;
       margin-top: 20px;
       display: flex;
@@ -26,8 +27,11 @@
     }
 
     #GameNameInput {
-      box-shadow: 0px 0px 10px 10px #764320;
-      background-image: url("/wooden-background.jpg");
+      box-shadow: 0px 0px 5px 5px #af8227bc;
+      background-color: rgba(0, 0, 0, 0.615);
+      border-radius: 5px;
+      border: none;
+      color:#af8227bc;
       font-size: large;
       margin-top: 20px;
       display: flex;
@@ -37,8 +41,11 @@
     }
 
     #PasswordInput {
-      box-shadow: 0px 0px 10px 10px #764320;
-      background-image: url("/wooden-background.jpg");
+      box-shadow: 0px 0px 5px 5px #af8227bc;
+      background-color: rgba(0, 0, 0, 0.615);
+      border-radius: 5px;
+      border: none;
+      color:#af8227bc;
       font-size: large;
       margin-top: 20px;
       display: flex;
@@ -49,15 +56,16 @@
   }
 
   .buttons {
-    box-shadow: 0px 0px 10px 10px #764320;
     height: 50px;
     margin-top: 30px;
     display: flex;
     justify-content: space-around;
     
     button {
-      box-shadow: 0px 0px 10px 10px #764320;
-      background-image: url("/wooden-background.jpg");
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px 10px #af8227bc;
+      background-color: rgba(0, 0, 0, 0.615);
+      color: #af8227bc ;
       font-size: large;
       border: none;
     }

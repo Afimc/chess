@@ -15,14 +15,18 @@ html{
   justify-content: center;
   height: 100%;
   width: 100%;
-  background-image: url('/chess-background-board.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: linear-gradient(45deg,transparent 34%, #af8227 35%, #af8227 40%, transparent 41%, transparent 59%, #af8227  60%, #af8227 65%, transparent 66%),linear-gradient(135deg,transparent 34%, #af8227 35%, #af8227 40%, transparent 41%, transparent 59%, #af8227  60%, #af8227 65%, transparent 66%);
+  background-size: 20em 20em;
+  background-color: #000000;
+  opacity: 1
 }
 
 h1{
+  border-radius: 50px;
+  background-color: #00000080;
+  color: #b9841c;
   z-index: 1;
   font-size: xxx-large;
   margin: 0;
+  margin-bottom: 2px;
 }
