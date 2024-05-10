@@ -1,6 +1,7 @@
 .onNewGame {
-  box-shadow: 0px 0px 20px 20px #af8227bc;
-  background-color: rgba(0, 0, 0, 0.615);
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 10px #af8227a2;
+  background-color: rgba(0, 0, 0, 0.748);
   margin-top: 50px;
   display: flex;
   flex-direction: column;
@@ -13,7 +14,7 @@
     flex-direction: column;
 
     #NickNameInput {
-      box-shadow: 0px 0px 5px 5px #af8227bc;
+      box-shadow: 0px 0px 4px 4px #af8227bc;
       background-color: rgba(0, 0, 0, 0.615);
       border-radius: 5px;
       border: none;
@@ -27,7 +28,7 @@
     }
 
     #GameNameInput {
-      box-shadow: 0px 0px 5px 5px #af8227bc;
+      box-shadow: 0px 0px 4px 4px #af8227bc;
       background-color: rgba(0, 0, 0, 0.615);
       border-radius: 5px;
       border: none;
@@ -41,7 +42,7 @@
     }
 
     #PasswordInput {
-      box-shadow: 0px 0px 5px 5px #af8227bc;
+      box-shadow: 0px 0px 4px 4px #af8227bc;
       background-color: rgba(0, 0, 0, 0.615);
       border-radius: 5px;
       border: none;
@@ -62,12 +63,17 @@
     justify-content: space-around;
     
     button {
-      border-radius: 5px;
-      box-shadow: 0px 0px 10px 10px #af8227bc;
+      cursor: pointer;
+      padding: 1rem ;
+      border-radius: 3px;
+      box-shadow: 0px 0px 4px 4px #af8227bc;
       background-color: rgba(0, 0, 0, 0.615);
       color: #af8227bc ;
       font-size: large;
       border: none;
+    }
+    button:hover{
+      transform: scale(1.02);
     }
   }
 }

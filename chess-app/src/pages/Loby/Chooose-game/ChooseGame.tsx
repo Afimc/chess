@@ -53,16 +53,21 @@ const ChooseGame = () => {
                             <button onClick={() => setOnNewGame(true)}>New Game</button>
                         </div>
                         <div className="waitingList">
-                            <ol>
-                                {
-                                    waitingList.map((x, i) => {
-                                        return <li id='listedItem' key={i}>
-                                            {i + 1} {x.gameName} {x.isLocked ? 'locked' : 'free'}
-                                            <button id='EnterButton' onClick={() => {setOpenedJoin(true), setGame(x)}}>Enter</button>
-                                        </li>
-                                    })
-                                }
-                            </ol>
+                            {
+                                waitingList.length>0
+                                ?<ol>
+                                    {
+                                        waitingList.map((x, i) => {
+                                            return <li id='listedItem' key={i}>
+                                                {i + 1} {x.gameName} {x.isLocked ? 'locked' : 'free'}
+                                                <button id='EnterButton' onClick={() => {setOpenedJoin(true), setGame(x)}}>Enter</button>
+                                            </li>
+                                        })
+                                    }
+                                </ol>
+                                :<p>!!!No active Games at the moment!!!    you can create one using the botton New Game</p>
+                            }
+                            
                         </div>
                         <p id="ActiveGamesInfo">{numberOfGames} active games at the moment </p>
                     </div>

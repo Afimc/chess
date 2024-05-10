@@ -31,7 +31,7 @@ const Info = () => {
     return (
         <div className="gameInfo">
             <button onClick={() => exitGame()}>Exit</button>
-            <div className="onTurn">
+            <div className={IsonTurn() === playerColor?'onTurn':'notOnTurn'}>
                 <p>{IsonTurn() === playerColor ? `you are on turn with ${playerColor === 1 ? 'White' : 'Black'}` : 'wait'} </p>
             </div>
             <div className="history">
