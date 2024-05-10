@@ -142,9 +142,13 @@ export class Game {
   }
   
   stopGame() {
-    this.playerOne.socket.emit(EMIT.PLAYERLEAVE, true);
-    this.playerTwo.socket.emit(EMIT.PLAYERLEAVE, true);
-    this.playerOne.socket.offAny();
-    this.playerTwo.socket.offAny();
+    try {
+      this.playerOne.socket.emit(EMIT.PLAYERLEAVE, true);
+      this.playerTwo.socket.emit(EMIT.PLAYERLEAVE, true);
+      this.playerOne.socket.offAny();
+      this.playerTwo.socket.offAny();
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 }
