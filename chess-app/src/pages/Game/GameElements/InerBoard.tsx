@@ -5,11 +5,13 @@ import { EMIT, IPieceWithPositon, Iposition } from "../../../core/Interfaces";
 import { socket } from "../../../core/sockets";
 import Reborn from "./InerBoardElements/Reborn";
 import Graveyard from "./InerBoardElements/Graveyard";
+import { gameStore } from '../../../core/PageStores';
 
 const InerBoard = () => {
   const currentBoard = updatedDataStore((state) => state.updatedBoard);
   const playerColor = updatedDataStore((state) => state.playerColor);
   const turns = updatedDataStore((state) => state.turns);
+  const onRebornRequest = gameStore((state) => state.onRebornRequest);
 
   const [posiblePositions, setPosiblePositions] = useState<Iposition[]>([]);
   const [ableToTrack, setAbleToTrack] = useState(false);
@@ -17,6 +19,7 @@ const InerBoard = () => {
   const [movingImg, setMovingImg] = useState<string | null>();
   const [fromPosition, setFromPosition] = useState<Iposition>();
   const [toPosition, setToPosition] = useState<Iposition>();
+  
 
   function IsonTurn() {
     const isOnTurn = turns % 2 === 0 ? 1 : 0;
@@ -32,7 +35,7 @@ const InerBoard = () => {
   }
 
   function onMouseDown(y: number, x: number) {
-    if (playerColor === currentBoard[y][x]?.piece._color && IsonTurn() === playerColor ) {
+    if (playerColor === currentBoard[y][x]?.piece._color && IsonTurn() === playerColor && onRebornRequest === false) {
       const posiblePosition: Iposition[] = currentBoard[y][x]?.posiblePositions || [];
       const _movingImg: string | null = getPiece(y, x);
       setPosiblePositions(posiblePosition);
