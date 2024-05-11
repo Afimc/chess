@@ -1,6 +1,12 @@
 import { io } from 'socket.io-client';
 
-const URL: string = '178.79.181.15:3000';
-// const URL: string = '78.130.159.107:3033';
+interface IENV {
+    VITE_SERVER_URL: string;
+}
+
+const ENV = (import.meta as any).env as IENV; 
+
+const URL = ENV.VITE_SERVER_URL;
 
 export const socket = io(URL, { autoConnect: false });
+
