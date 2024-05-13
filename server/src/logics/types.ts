@@ -52,12 +52,12 @@ export enum ON {
 
 export enum EMIT {
   ERROR = "error",
+  MATT = 'matt',
   NEWWAITINGLIST = "new-waitingList",
   GAMEMACHED = "game-mached",
   PLAYERLEAVE = "player-leave",
   PIECEREQUEST = "piece-request",
   UPDATEDDATA = "updated-data",
-
 }
 
 export type TGrid = (Piece | null)[][];

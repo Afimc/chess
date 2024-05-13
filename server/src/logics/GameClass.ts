@@ -85,6 +85,11 @@ export class Game {
     };
     this.history.unshift(addTurn);
   }
+
+  matt() {
+    this.playerOne.socket.emit(EMIT.MATT)
+    this.playerTwo.socket.emit(EMIT.MATT)
+  }
   
   move(moveData: IMoveData, player: Player) {
     const { fromPosition, toPosition } = moveData;
@@ -110,7 +115,7 @@ export class Game {
     pieceToMove.setIsMoved = true;
     this.addToHistory(pieceToMove, pieceToKill, fromPosition, toPosition, null);
     this.updateData();
-    checkForMatt(player, this.board);
+    if (checkForMatt(player, this.board)) this.matt();
   }
 
   private startListenForEvents() {

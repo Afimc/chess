@@ -1,7 +1,7 @@
 import { BISHOP, KING, KNIGHT, PAWN, Piece, QUEEN, ROOK } from "./PiecesClass";
 import { Player } from "./PlayerClass";
 import { ChessBoard } from "./board";
-import { EColor, EPiece, IPosition, TGrid } from "./types";
+import { EColor, EMIT, EPiece, IPosition, TGrid } from "./types";
 
 function checkForCheck(boardGridCopy: (Piece | null)[][], test: Piece) {
   const enemyPieces = boardGridCopy.map((row, y) => {
