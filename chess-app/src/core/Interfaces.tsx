@@ -35,11 +35,11 @@ export interface IUpdatedData {
   graveyard: IPiece[];
   whitePlayerId: string;
   history: IHistoryTurn[];
-
 }
 
 export enum ON {
   ERROR = "error",
+  MATT = 'matt',
   NEWWAITINGLIST = "new-waitingList",
   GAMEMACHED = "game-mached",
   PLAYERLEAVE = "player-leave",
@@ -78,6 +78,7 @@ export interface IUpdatedDataStore {
   whitePlayerId: string;
   history: IHistoryTurn[];
   numberOfGames: number;
+  isMatt: boolean;
 
   setWaitingList: (s: IGameInfo[]) => void;
   setPlayerColor: (s: number) => void;
@@ -87,4 +88,5 @@ export interface IUpdatedDataStore {
   setUpdatedBoard: (s: IPieceWithPositon[][]) => void;
   setHistory: (s: IHistoryTurn[]) => void;
   setNumberOfGames: (s: number) => void;
+  setIsMatt: (s: boolean) => void;
 }

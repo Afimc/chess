@@ -13,6 +13,7 @@ export const updatedDataStore = create<IUpdatedDataStore>()((set) => ({
     whitePlayerId: '',
     history: [],
     numberOfGames: 0,
+    isMatt: false,
     
     setWaitingList: (s) => set(() => ({ waitingList: s })),
     setPlayerColor: (s) => set(() => ({ playerColor: s })),
@@ -22,4 +23,5 @@ export const updatedDataStore = create<IUpdatedDataStore>()((set) => ({
     setUpdatedBoard: (s) => set(() => ({ updatedBoard: s })),
     setHistory: (s) => set(() => ({ history: s })),
     setNumberOfGames: (s) => set(() => ({ numberOfGames: s })),
+    setIsMatt: (s) => set(() => ({ isMatt: s })),
 }));

@@ -20,6 +20,7 @@ const App = () => {
   const setInfo = updatedDataStore((state) => state.setInfo);
   const setGraveyard = updatedDataStore((state) => state.setGraveyard);
   const setNumberOfGames = updatedDataStore((state) => state.setNumberOfGames);
+  const setIsMatt = updatedDataStore((state) => state.setIsMatt);
   
   useEffect(() => {
     socket.on(ON.NEWWAITINGLIST, (list: IGameInfo[], numberOfGames: number) => {
@@ -33,6 +34,10 @@ const App = () => {
 
     socket.on(ON.PLAYERLEAVE, (didPlayerLeave: Boolean) => {
       startStopGame(!didPlayerLeave);
+    });
+
+    socket.on(ON.MATT, () => {
+      setIsMatt(true)
     });
 
     socket.on(ON.UPDATEDDATA, (data: IUpdatedData) => {
@@ -54,6 +59,7 @@ const App = () => {
 
     return () => {
       socket.disconnect();
+      socket.off(ON.MATT)
       socket.off(ON.PLAYERLEAVE);
       socket.off(ON.UPDATEDDATA);
       socket.off(ON.GAMEMACHED);
